@@ -13,6 +13,6 @@ namespace RecommendationService.Models
         public long ProductId { get; set; }
 
         public Persona Persona { get; set; }
-        public Interest Product { get; set; }
+        public Interest Interest { get; set; }
     }
 }

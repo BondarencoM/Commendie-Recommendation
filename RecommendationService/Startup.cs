@@ -30,6 +30,16 @@ namespace RecommendationService
         {
             services.AddDbContext<DatabaseContext>(options => options.UseInMemoryDatabase("IdkWhatDoesTheNameDo"));
             services.AddControllers();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("default", policy =>
+                {
+                    policy.WithOrigins("http://127.0.0.1:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,7 +49,7 @@ namespace RecommendationService
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors("default");
             app.UseHttpsRedirection();
 
             app.UseRouting();

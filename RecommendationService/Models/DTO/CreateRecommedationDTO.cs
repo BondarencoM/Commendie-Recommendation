@@ -9,8 +9,8 @@ namespace CommendMine.Models.DTO
     public class CreateRecommedationDTO
     {
         public long PersonId { get; set; }
-        public long ProductId { get; set; }
+        public long InterestId { get; set; }
 
-        public Recommendation ToRecommendation() => new Recommendation() { PersonId = PersonId, ProductId = ProductId, CreatedAt = DateTime.Now };
+        public Recommendation ToRecommendation() => new Recommendation() { PersonaId = PersonId, InterestId = InterestId, CreatedAt = DateTime.Now };
     }
 }

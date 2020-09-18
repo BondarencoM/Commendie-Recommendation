@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecommendationService.Models;
+using RecommendationService.Models.ViewModels;
 
 namespace RecommendationService.Controllers
 {
@@ -13,25 +14,42 @@ namespace RecommendationService.Controllers
     [ApiController]
     public class PersonasController : ControllerBase
     {
-        private readonly DatabaseContext _context;
+        private readonly DatabaseContext db;
 
         public PersonasController(DatabaseContext context)
         {
-            _context = context;
+            db = context;
         }
 
         // GET: api/Personas
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Persona>>> GetPersonas()
         {
-            return await _context.Personas.ToListAsync();
+            return await db.Personas.ToListAsync();
         }
+
+        /// <summary>
+        /// Returns a list of personas for the user to discover, with some of their recent recommendations
+        /// </summary>
+        /// <param name="limit">Query parameter for the number of personas to return</param>
+        /// <returns></returns>
+        [HttpGet("discover")]
+        public async Task<ActionResult<IEnumerable<DiscoverPersonViewModel>>> GetSuggestedPersonasForDiscovery(ushort limit = 12)
+        {
+            return await db.Personas
+                .Take(limit)
+                .Include(p => p.Recommendations)
+                    .ThenInclude(r => r.Interest)
+                .Select(p => new DiscoverPersonViewModel(p))
+                .ToListAsync();
+        }
+
 
         // GET: api/Personas/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Persona>> GetPersona(long id)
         {
-            var persona = await _context.Personas.FindAsync(id);
+            var persona = await db.Personas.FindAsync(id);
 
             if (persona == null)
             {
@@ -40,6 +58,7 @@ namespace RecommendationService.Controllers
 
             return persona;
         }
+
 
         // PUT: api/Personas/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -52,11 +71,11 @@ namespace RecommendationService.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(persona).State = EntityState.Modified;
+            db.Entry(persona).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -79,8 +98,8 @@ namespace RecommendationService.Controllers
         [HttpPost]
         public async Task<ActionResult<Persona>> PostPersona(Persona persona)
         {
-            _context.Personas.Add(persona);
-            await _context.SaveChangesAsync();
+            db.Personas.Add(persona);
+            await db.SaveChangesAsync();
 
             return CreatedAtAction("GetPersona", new { id = persona.Id }, persona);
         }
@@ -89,21 +108,23 @@ namespace RecommendationService.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Persona>> DeletePersona(long id)
         {
-            var persona = await _context.Personas.FindAsync(id);
+            var persona = await db.Personas.FindAsync(id);
             if (persona == null)
             {
                 return NotFound();
             }
 
-            _context.Personas.Remove(persona);
-            await _context.SaveChangesAsync();
+            db.Personas.Remove(persona);
+            await db.SaveChangesAsync();
 
             return persona;
         }
 
+        
+
         private bool PersonaExists(long id)
         {
-            return _context.Personas.Any(e => e.Id == id);
+            return db.Personas.Any(e => e.Id == id);
         }
     }
 }

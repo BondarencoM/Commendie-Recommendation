@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -6,7 +6,15 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
-  <ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>3</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DockerfileRunArguments>-p 5001:443</DockerfileRunArguments>
+  </PropertyGroup>
+
+	<ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.8" />

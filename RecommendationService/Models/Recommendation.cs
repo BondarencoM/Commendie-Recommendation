@@ -8,9 +8,11 @@ namespace RecommendationService.Models
     public class Recommendation
     {
         public long Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public long PersonId { get; set; }
-        public long ProductId { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+
+        public long PersonaId { get; set; }
+        public long InterestId { get; set; }
 
         public Persona Persona { get; set; }
         public Interest Interest { get; set; }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using CommendMine.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RecommendationService.Models
 {
@@ -40,7 +42,8 @@ namespace RecommendationService.Models
                 new Interest { Id = 10, Name = "Hamlet", Type = InterestType.Book}
                 );
 
-            modelBuilder.Entity<Recommendation>().HasData(
+            var recommendations = new List<Recommendation>
+            {
                 new Recommendation { Id = 11, PersonaId = 1, InterestId = 1 },
                 new Recommendation { Id = 12, PersonaId = 1, InterestId = 2 },
                 new Recommendation { Id = 13, PersonaId = 1, InterestId = 3 },
@@ -69,9 +72,10 @@ namespace RecommendationService.Models
 
                 new Recommendation { Id = 61, PersonaId = 6, InterestId = 5 },
                 new Recommendation { Id = 62, PersonaId = 6, InterestId = 9 }
+            };
+            recommendations = recommendations.Select(r => { r.Context = "https://example.com/url-with-proof"; return r; }).ToList();
 
-
-                );
+            modelBuilder.Entity<Recommendation>().HasData(recommendations);
 
         }
     }

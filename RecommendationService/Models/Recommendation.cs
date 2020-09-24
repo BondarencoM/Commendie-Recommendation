@@ -10,6 +10,7 @@ namespace RecommendationService.Models
         public long Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public string Context { get; set; }
 
         public long PersonaId { get; set; }
         public long InterestId { get; set; }

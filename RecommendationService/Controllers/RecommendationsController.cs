@@ -31,7 +31,11 @@ namespace RecommendationService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Recommendation>> GetRecommendation(long id)
         {
-            var recommendation = await _context.Recommendation.FindAsync(id);
+            var recommendation = await _context.Recommendation
+                                                .Include(r => r.Interest)
+                                                .Include(r => r.Persona)
+                                                .Where(r => r.Id == id)
+                                                .SingleOrDefaultAsync();
 
             if (recommendation == null)
             {

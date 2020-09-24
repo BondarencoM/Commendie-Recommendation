@@ -67,7 +67,7 @@ namespace RecommendationService.Models
                 new Recommendation { Id = 53, PersonaId = 5, InterestId = 5 },
                 new Recommendation { Id = 54, PersonaId = 5, InterestId = 6 },
 
-                new Recommendation { Id = 61, PersonaId = 6, InterestId = 6 },
+                new Recommendation { Id = 61, PersonaId = 6, InterestId = 5 },
                 new Recommendation { Id = 62, PersonaId = 6, InterestId = 9 }
 
 

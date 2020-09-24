@@ -9,13 +9,13 @@ namespace RecommendationService.Models.ViewModels
     {
         public Persona Persona { get; set; }
 
-        public IEnumerable<Interest> Interests { get; set; }
+        public IEnumerable<Recommendation> Recommendations { get; set; }
 
         public DiscoverPersonViewModel(Persona persona)
         {
             Persona = persona;
 
-            Interests = persona.Recommendations.Select(r => r.Interest);
+            Recommendations = persona.Recommendations;
         }
     }
 }

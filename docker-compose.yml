@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  authenticationservice:
+    image: ${DOCKER_REGISTRY-}authenticationservice
+    build:
+      context: .
+      dockerfile: AuthenticationService/Dockerfile
+
+  profileservice:
+    image: ${DOCKER_REGISTRY-}profileservice
+    build:
+      context: .
+      dockerfile: ProfileService/Dockerfile
+
+  recommendationservice:
+    image: ${DOCKER_REGISTRY-}recommendationservice
+    build:
+      context: .
+      dockerfile: RecommendationService/Dockerfile

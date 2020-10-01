@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
 using RecommendationService.Models;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Logging;
 
 namespace RecommendationService
 {
@@ -28,8 +30,24 @@ namespace RecommendationService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DatabaseContext>(options => options.UseInMemoryDatabase("IdkWhatDoesTheNameDo"));
+            services.AddDbContext<DatabaseContext>(options => options.UseInMemoryDatabase("recommendation-db"));
             services.AddControllers();
+
+            services.AddAuthentication("Bearer")
+            .AddJwtBearer("Bearer", options =>
+            {
+                options.Authority = "http://authenticationservice";
+
+                // Todo: HUGE PROBLEM, MAKE HHTTPS WORK somehow
+                options.RequireHttpsMetadata = false;
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidAudience = "recommendation-service",
+                    // HUGE PROBLEM?
+                    ValidateIssuer = false,
+                };
+            });
 
             services.AddCors(options =>
             {
@@ -54,6 +72,7 @@ namespace RecommendationService
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

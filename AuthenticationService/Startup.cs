@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using AuthenticationService.Services;
 
 namespace AuthenticationService
 {
@@ -30,6 +32,7 @@ namespace AuthenticationService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddRazorPages();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
@@ -53,8 +56,9 @@ namespace AuthenticationService
                 .AddInMemoryClients(Config.Clients)
                 .AddAspNetIdentity<ApplicationUser>();
 
-            // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
+
+            services.AddTransient<IEmailSender, EmailSenderStub>();
 
             services.AddAuthentication()
                 .AddGoogle(options =>
@@ -85,6 +89,7 @@ namespace AuthenticationService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
             });
         }
     }

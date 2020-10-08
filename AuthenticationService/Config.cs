@@ -37,13 +37,13 @@ namespace AuthenticationService
                 {
                     ClientId = "angular-app",
                     ClientName = "Commendie Web application",
-
+                    
                     RequireClientSecret = false,
 
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
                     
-                    RedirectUris = { "http://localhost:4200/auth-callback" },
+                    RedirectUris = { "http://localhost:4200/auth-callback", "http://localhost:4200/auth-silent-callback" },
                     PostLogoutRedirectUris = { "http://localhost:4200/auth-signout-callback" },
                     AllowedCorsOrigins = { "http://localhost:4200" },
 

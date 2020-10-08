@@ -4,8 +4,9 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>82047727-e345-43f9-a566-5186f557af9c</ProjectGuid>
-    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/{Scheme}://{ServiceHost}:{ServicePort}</DockerServiceUrl>
+    <DockerLaunchAction>None</DockerLaunchAction>
+    <DockerServiceUrl>
+    </DockerServiceUrl>
     <DockerServiceName>authenticationservice</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>

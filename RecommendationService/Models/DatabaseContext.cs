@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using CommendMine.Models;
 using System.Collections.Generic;
 using System.Linq;
 

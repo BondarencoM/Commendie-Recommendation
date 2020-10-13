@@ -15,6 +15,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using AuthenticationService.Services;
+using AuthenticationService.Services.Interfaces;
+using System;
+using System.Net.Http;
 
 namespace AuthenticationService
 {
@@ -58,8 +61,6 @@ namespace AuthenticationService
 
             builder.AddDeveloperSigningCredential();
 
-            services.AddTransient<IEmailSender, EmailSenderStub>();
-
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
@@ -71,6 +72,13 @@ namespace AuthenticationService
                     options.ClientId = "copy client ID from Google here";
                     options.ClientSecret = "copy client secret from Google here";
                 });
+
+            services.AddTransient<IEmailSender, EmailSenderStub>();
+
+
+            services.AddHttpClient<IProfileService, ProfileService>(
+                client => client.BaseAddress = new Uri("http://profileservice:80/api/")
+            );
         }
 
         public void Configure(IApplicationBuilder app)

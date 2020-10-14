@@ -15,6 +15,8 @@ using Microsoft.EntityFrameworkCore.InMemory;
 using RecommendationService.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Logging;
+using RecommendationService.Services.Interfaces;
+using RecommendationService.Services;
 
 namespace RecommendationService
 {
@@ -58,6 +60,9 @@ namespace RecommendationService
                         .AllowAnyMethod();
                 });
             });
+
+            services.AddScoped<IPersonaScrappingService, WikiPersonaScrappingService>();
+            services.AddHttpClient<IPersonasService, PersonasService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

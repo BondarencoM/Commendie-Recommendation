@@ -24,7 +24,7 @@ namespace RecommendationService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Interest>>> GetInterests()
         {
-            return await _context.Interests.ToListAsync();
+            return await _context.Interests.AsQueryable().ToListAsync();
         }
 
         // GET: api/Interests/5

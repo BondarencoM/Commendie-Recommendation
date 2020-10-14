@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RecommendationService.Models.Personas;
+using RecommendationService.Models.Recommendations;
 using System.Collections.Generic;
 using System.Linq;
 

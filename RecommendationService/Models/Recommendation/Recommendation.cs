@@ -1,9 +1,10 @@
-﻿using System;
+﻿using RecommendationService.Models.Personas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecommendationService.Models
+namespace RecommendationService.Models.Recommendations
 {
     public class Recommendation
     {

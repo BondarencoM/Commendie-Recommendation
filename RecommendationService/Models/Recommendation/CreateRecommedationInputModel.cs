@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecommendationService.Models.DTO
+namespace RecommendationService.Models.Recommendations
 {
-    public class CreateRecommedationDTO
+    public class CreateRecommedationInputModel
     {
         public long PersonId { get; set; }
         public long InterestId { get; set; }

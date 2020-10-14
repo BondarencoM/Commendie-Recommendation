@@ -1,9 +1,10 @@
-﻿using System;
+﻿using RecommendationService.Models.Recommendations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RecommendationService.Models.ViewModels
+namespace RecommendationService.Models.Personas
 {
     public class DiscoverPersonViewModel
     {

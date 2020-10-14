@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecommendationService.Models;
+using RecommendationService.Models.Recommendations;
 
 namespace RecommendationService.Controllers
 {
@@ -24,7 +25,7 @@ namespace RecommendationService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Recommendation>>> GetRecommendation()
         {
-            return await _context.Recommendation.ToListAsync();
+            return await _context.Recommendation.AsQueryable().ToListAsync();
         }
 
         // GET: api/Recommendations/5

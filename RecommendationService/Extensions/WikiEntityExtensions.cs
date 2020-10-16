@@ -11,17 +11,18 @@ namespace RecommendationService.Extensions
     {
         public static bool IsHuman(this Entity entity)
         {
+            return entity.InstanceOf() == "Q5";  // Q5 is the identifier for 'human'
+        }
 
+        public static string InstanceOf(this Entity entity)
+        {
             if (entity.Claims.Count == 0)
-                return false;
+                return null;
 
-            string type = entity.Claims
-                            .Where(c => c.MainSnak.PropertyId == WikibaseProperty.InstanceOf)
-                            .Select(c => c.MainSnak.DataValue)
-                            .Single()
-                            .ToString();
-
-            return type == "Q5"; // Q5 is the identifier for 'human'
+            return entity.Claims
+                        .Where(c => c.MainSnak.PropertyId == WikibaseProperty.InstanceOf)
+                        .FirstOrDefault()
+                        ?.MainSnak.DataValue.ToString() ?? null;
         }
     }
 }

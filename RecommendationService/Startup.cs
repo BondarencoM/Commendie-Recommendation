@@ -17,6 +17,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Logging;
 using RecommendationService.Services.Interfaces;
 using RecommendationService.Services;
+using WikiClientLibrary.Client;
+using WikiClientLibrary.Sites;
 
 namespace RecommendationService
 {
@@ -61,8 +63,19 @@ namespace RecommendationService
                 });
             });
 
+            services.AddScoped( 
+                sv => new WikiClient{ ClientUserAgent = "WCLQuickStart/1.0 bondarencom" }
+            );
+            services.AddScoped( 
+                sv => new WikiSite(sv.GetService<WikiClient>(), "https://www.wikidata.org/w/api.php")
+            );
+
             services.AddScoped<IPersonaScrappingService, WikiPersonaScrappingService>();
-            services.AddHttpClient<IPersonasService, PersonasService>();
+            services.AddScoped<IInterestScrappingService, WikiInterestScrappingService>();
+
+            services.AddScoped<IPersonasService, PersonasService>();
+            services.AddScoped<IInterestService, InterestService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

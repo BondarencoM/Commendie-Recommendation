@@ -10,38 +10,25 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using WikiClientLibrary.Client;
 using WikiClientLibrary.Sites;
 using WikiClientLibrary.Wikibase;
 
 namespace RecommendationService.Services
 {
-    public class WikiPersonaScrappingService : IPersonaScrappingService, IDisposable
+    public class WikiPersonaScrappingService : IPersonaScrappingService
     {
-        private readonly HttpClient http;
-        private readonly WikiClient client;
-        private readonly WikiSite wikiSite;
+        private readonly WikiSite wiki;
 
-        public WikiPersonaScrappingService(HttpClient http)
+        public WikiPersonaScrappingService(WikiSite wiki)
         {
-            this.http = http;
-            client = new WikiClient
-            {
-                ClientUserAgent = "WCLQuickStart/1.0 bondarencom"
-            };
-            wikiSite = new WikiSite(client, "https://www.wikidata.org/w/api.php");
-        }
-
-        public void Dispose()
-        {
-            ((IDisposable)client).Dispose();
+            this.wiki = wiki;
         }
 
         public async Task<Persona> ScrapePersonaDetails(string wikiId)
         {
-            await wikiSite.Initialization;
+            await wiki.Initialization;
 
-            var entity = new Entity(wikiSite, wikiId);
+            var entity = new Entity(wiki, wikiId);
             await entity.RefreshAsync(EntityQueryOptions.FetchAllProperties);
 
             if (entity.IsHuman() == false) 

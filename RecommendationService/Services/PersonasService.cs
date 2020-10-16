@@ -12,13 +12,11 @@ namespace RecommendationService.Services
 {
     public class PersonasService : IPersonasService
     {
-        private readonly HttpClient http;
         private readonly DatabaseContext db;
         private readonly IPersonaScrappingService scrappingService;
 
-        public PersonasService(HttpClient http, DatabaseContext db, IPersonaScrappingService scrappingService)
+        public PersonasService(DatabaseContext db, IPersonaScrappingService scrappingService)
         {
-            this.http = http;
             this.db = db;
             this.scrappingService = scrappingService;
         }

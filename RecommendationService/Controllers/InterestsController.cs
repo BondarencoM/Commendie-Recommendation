@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecommendationService.Models;
+using RecommendationService.Models.Exceptions;
+using RecommendationService.Models.Interests;
+using RecommendationService.Services;
+using RecommendationService.Services.Interfaces;
 
 namespace RecommendationService.Controllers
 {
@@ -13,25 +17,25 @@ namespace RecommendationService.Controllers
     [ApiController]
     public class InterestsController : ControllerBase
     {
-        private readonly DatabaseContext _context;
+        private readonly IInterestService _service;
 
-        public InterestsController(DatabaseContext context)
+        public InterestsController(IInterestService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/Interests
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Interest>>> GetInterests()
         {
-            return await _context.Interests.AsQueryable().ToListAsync();
+            return await _service.All();
         }
 
         // GET: api/Interests/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Interest>> GetInterest(long id)
         {
-            var interest = await _context.Interests.FindAsync(id);
+            var interest = await _service.Find(id);
 
             if (interest == null)
             {
@@ -45,65 +49,70 @@ namespace RecommendationService.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInterest(long id, Interest interest)
+        public Task<IActionResult> PutInterest(long id, Interest interest)
         {
-            if (id != interest.Id)
-            {
-                return BadRequest();
-            }
+            throw new NotImplementedException();
 
-            _context.Entry(interest).State = EntityState.Modified;
+            //if (id != interest.Id)
+            //{
+            //    return BadRequest();
+            //}
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!InterestExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            //_context.Entry(interest).State = EntityState.Modified;
 
-            return NoContent();
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!InterestExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+
+            //return NoContent();
         }
 
         // POST: api/Interests
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Interest>> PostInterest(Interest interest)
+        public async Task<ActionResult<InterestViewModel>> PostInterest(CreateInterestInputModel interest)
         {
-            _context.Interests.Add(interest);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetInterest", new { id = interest.Id }, interest);
+            try
+            {
+                Interest fromDb = await _service.Add(interest);
+                return CreatedAtAction("GetInterest", new { id = fromDb.Id }, fromDb);
+            }
+            catch (AddedEntityIsNotAnInterest ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE: api/Interests/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Interest>> DeleteInterest(long id)
         {
-            var interest = await _context.Interests.FindAsync(id);
-            if (interest == null)
-            {
-                return NotFound();
-            }
+            //var interest = await _context.Interests.FindAsync(id);
+            //if (interest == null)
+            //{
+            //    return NotFound();
+            //}
 
-            _context.Interests.Remove(interest);
-            await _context.SaveChangesAsync();
+            //_context.Interests.Remove(interest);
+            //await _context.SaveChangesAsync();
 
-            return interest;
+            //return interest;
+            throw new NotImplementedException();
         }
 
-        private bool InterestExists(long id)
-        {
-            return _context.Interests.Any(e => e.Id == id);
-        }
+
     }
 }

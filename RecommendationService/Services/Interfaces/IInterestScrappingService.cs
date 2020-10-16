@@ -1,4 +1,4 @@
-﻿using RecommendationService.Models.Personas;
+﻿using RecommendationService.Models.Interests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace RecommendationService.Services.Interfaces
 {
-    public interface IPersonaScrappingService
+    public interface IInterestScrappingService
     {
-        Task<Persona> ScrapePersonaDetails(string identifier);
+        Task<Interest> ScrapeInterestDetails(string identifier);
     }
 }

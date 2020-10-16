@@ -1,4 +1,5 @@
-﻿using RecommendationService.Models.Personas;
+﻿using RecommendationService.Models.Interests;
+using RecommendationService.Models.Personas;
 using System;
 using System.Collections.Generic;
 using System.Linq;

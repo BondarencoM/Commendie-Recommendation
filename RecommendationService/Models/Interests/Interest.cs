@@ -2,13 +2,16 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RecommendationService.Models
+namespace RecommendationService.Models.Interests
 {
     public class Interest
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public string ImageURI { get; set; }
+        public string Description { get; set; }
+        public string WikiId { get; set; }
+
+
 
         [NotMapped]
         [JsonIgnore]
@@ -24,6 +27,8 @@ namespace RecommendationService.Models
 
     public enum InterestType
     {
-        Book, Movie, Game
+        Book, Movie, Game,
+        Podcast,
+        Others
     }
 }

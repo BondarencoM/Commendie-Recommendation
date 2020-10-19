@@ -54,5 +54,14 @@ namespace RecommendationService.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<Persona> GetOrCreate(CreatePersonaInputModel input)
+        {
+            var persona = await db.Personas.AsQueryable()
+                                    .Where(p => p.WikiId == input.WikiId)
+                                    .SingleOrDefaultAsync();
+
+            return persona ?? await Add(input);
+        }
     }
 }

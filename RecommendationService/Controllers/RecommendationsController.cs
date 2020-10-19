@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecommendationService.Models;
+using RecommendationService.Models.Exceptions;
 using RecommendationService.Models.Recommendations;
+using RecommendationService.Services.Interfaces;
 
 namespace RecommendationService.Controllers
 {
@@ -14,29 +16,25 @@ namespace RecommendationService.Controllers
     [ApiController]
     public class RecommendationsController : ControllerBase
     {
-        private readonly DatabaseContext _context;
+        private readonly IRecommendationService _service;
 
-        public RecommendationsController(DatabaseContext context)
+        public RecommendationsController(IRecommendationService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/Recommendations
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Recommendation>>> GetRecommendation()
         {
-            return await _context.Recommendation.AsQueryable().ToListAsync();
+            return await _service.All();
         }
 
         // GET: api/Recommendations/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Recommendation>> GetRecommendation(long id)
         {
-            var recommendation = await _context.Recommendation
-                                                .Include(r => r.Interest)
-                                                .Include(r => r.Persona)
-                                                .Where(r => r.Id == id)
-                                                .SingleOrDefaultAsync();
+            var recommendation = await _service.Find(id);
 
             if (recommendation == null)
             {
@@ -50,65 +48,71 @@ namespace RecommendationService.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRecommendation(long id, Recommendation recommendation)
+        public Task<IActionResult> PutRecommendation(long id, Recommendation recommendation)
         {
-            if (id != recommendation.Id)
-            {
-                return BadRequest();
-            }
+            throw new NotImplementedException();
+            //if (id != recommendation.Id)
+            //{
+            //    return BadRequest();
+            //}
 
-            _context.Entry(recommendation).State = EntityState.Modified;
+            //_context.Entry(recommendation).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RecommendationExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!RecommendationExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
 
-            return NoContent();
+            //return NoContent();
         }
 
         // POST: api/Recommendations
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Recommendation>> PostRecommendation(Recommendation recommendation)
+        public async Task<ActionResult<Recommendation>> PostRecommendation(CreateRecommedationInputModel inputData)
         {
-            _context.Recommendation.Add(recommendation);
-            await _context.SaveChangesAsync();
+
+            Recommendation recommendation;
+            try
+            {
+                recommendation = await _service.Add(inputData);
+            }
+            catch (EntityAlreadyExists<Recommendation> ex)
+            {
+                return Ok(ex.Entity);
+            }
 
             return CreatedAtAction("GetRecommendation", new { id = recommendation.Id }, recommendation);
         }
 
         // DELETE: api/Recommendations/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Recommendation>> DeleteRecommendation(long id)
+        public Task<ActionResult<Recommendation>> DeleteRecommendation(long id)
         {
-            var recommendation = await _context.Recommendation.FindAsync(id);
-            if (recommendation == null)
-            {
-                return NotFound();
-            }
+            throw new NotImplementedException();
 
-            _context.Recommendation.Remove(recommendation);
-            await _context.SaveChangesAsync();
+            //var recommendation = await _context.Recommendation.FindAsync(id);
+            //if (recommendation == null)
+            //{
+            //    return NotFound();
+            //}
 
-            return recommendation;
-        }
+            //_context.Recommendation.Remove(recommendation);
+            //await _context.SaveChangesAsync();
 
-        private bool RecommendationExists(long id)
-        {
-            return _context.Recommendation.Any(e => e.Id == id);
+            //return recommendation;
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using RecommendationService.Models;
+using RecommendationService.Models.Interests;
+using RecommendationService.Models.Personas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +10,8 @@ namespace RecommendationService.Models.Recommendations
 {
     public class CreateRecommedationInputModel
     {
-        public long PersonId { get; set; }
-        public long InterestId { get; set; }
-
-        public Recommendation ToRecommendation() => new Recommendation() { PersonaId = PersonId, InterestId = InterestId, CreatedAt = DateTime.Now };
+        public CreatePersonaInputModel Persona {get; set;}
+        public CreateInterestInputModel Interest {get; set;}
+        public string Context { get; set; }
     }
 }

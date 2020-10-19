@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RecommendationService.Models;
 using RecommendationService.Models.Exceptions;
 using RecommendationService.Models.Interests;
@@ -24,7 +25,7 @@ namespace RecommendationService.Services
 
         public async Task<List<Interest>> All()
         {
-            return await db.Interests.ToListAsync();
+            return await db.Interests.AsQueryable().ToListAsync();
         }
 
         public async Task<Interest> Find(long id)
@@ -35,7 +36,7 @@ namespace RecommendationService.Services
         public async Task<Interest> Add(CreateInterestInputModel model)
         {
 
-            Interest interest = await _scrappingService.ScrapeInterestDetails(model.wikiId);
+            Interest interest = await _scrappingService.ScrapeInterestDetails(model.WikiId);
             var fromDb = db.Interests.Add(interest);
             await db.SaveChangesAsync();
 
@@ -46,6 +47,15 @@ namespace RecommendationService.Services
         public Task Update(long id, CreateInterestInputModel persona)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Interest> GetOrCreate(CreateInterestInputModel input)
+        {
+            var interest = await db.Interests.AsQueryable()
+                        .Where(i => i.WikiId == input.WikiId)
+                        .SingleOrDefaultAsync();
+
+            return interest ?? await Add(input);
         }
     }
 }

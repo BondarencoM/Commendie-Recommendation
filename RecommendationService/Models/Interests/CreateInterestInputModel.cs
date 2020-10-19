@@ -7,6 +7,6 @@ namespace RecommendationService.Models.Interests
 {
     public class CreateInterestInputModel
     {
-        public string wikiId { get; set; }
+        public string WikiId { get; set; }
     }
 }

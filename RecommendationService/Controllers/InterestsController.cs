@@ -100,6 +100,7 @@ namespace RecommendationService.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Interest>> DeleteInterest(long id)
         {
+            throw new NotImplementedException();
             //var interest = await _context.Interests.FindAsync(id);
             //if (interest == null)
             //{

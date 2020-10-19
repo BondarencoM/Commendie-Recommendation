@@ -18,6 +18,7 @@ namespace RecommendationService.Models.Wikibase
             public static string Myth => "Q12827256";
             public static string Novel => "Q8261";
             public static string Novella => "Q149537";
+            public static string Play => "Q25379";
             public static string Poem => "Q5185279";
             public static string ShortStory => "Q49084";
             public static string ShortNovel => "Q12799318";
@@ -29,7 +30,7 @@ namespace RecommendationService.Models.Wikibase
         {
             public static string AnimatedSeries => "Q581714";
             public static string AnimeTVSeries => "Q63952888";
-            public static string Film => "Q44578";
+            public static string Film => "Q11424";
             public static string FeatureFilm => "Q24869";
             public static string Film3D => "Q229390";
             public static string Miniseries => "Q1259759";

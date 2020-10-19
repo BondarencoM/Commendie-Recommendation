@@ -9,5 +9,7 @@ namespace RecommendationService.Services.Interfaces
 {
     public interface IInterestService: IRepository<Interest, CreateInterestInputModel, CreateInterestInputModel>
     {
+        public Task<Interest> GetOrCreate(CreateInterestInputModel input);
+
     }
 }

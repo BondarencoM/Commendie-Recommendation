@@ -11,5 +11,7 @@ namespace RecommendationService.Services.Interfaces
     public interface IPersonasService: IRepository<Persona, CreatePersonaInputModel, UpdatePersonaInputModel>
     {
         public Task<List<DiscoverPersonViewModel>> GetSuggestedForDiscovery(ushort limit);
+
+        public Task<Persona> GetOrCreate(CreatePersonaInputModel input);
     }
 }

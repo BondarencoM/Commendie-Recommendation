@@ -75,6 +75,7 @@ namespace RecommendationService
 
             services.AddScoped<IPersonasService, PersonasService>();
             services.AddScoped<IInterestService, InterestService>();
+            services.AddScoped<IRecommendationService, RecommednationService>();
 
         }
 

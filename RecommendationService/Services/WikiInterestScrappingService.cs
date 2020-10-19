@@ -57,6 +57,7 @@ namespace RecommendationService.Services
             { Books.Myth, InterestType.Book },
             { Books.Novel, InterestType.Book },
             { Books.Novella, InterestType.Book },
+            { Books.Play, InterestType.Book },
             { Books.Poem, InterestType.Book },
             { Books.ShortNovel, InterestType.Book },
             { Books.ShortStory, InterestType.Book },

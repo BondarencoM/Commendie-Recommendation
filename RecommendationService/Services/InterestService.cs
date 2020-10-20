@@ -38,10 +38,16 @@ namespace RecommendationService.Services
             return await db.Interests.FindAsync(id);
         }
 
-        public async Task<Interest> Add(CreateInterestInputModel model)
+        public async Task<Interest> Add(CreateInterestInputModel input)
         {
+            Interest currentVersion = await db.Interests.AsQueryable()
+                                                .Where(e => e.WikiId == input.WikiId)
+                                                .SingleOrDefaultAsync();
 
-            Interest interest = await _scrappingService.ScrapeInterestDetails(model.WikiId);
+            if (currentVersion != null)
+                throw new EntityAlreadyExists<Interest>(currentVersion);
+
+            Interest interest = await _scrappingService.ScrapeInterestDetails(input.WikiId);
             interest.AddedBy = PrincipalUsername;
             var fromDb = db.Interests.Add(interest);
             await db.SaveChangesAsync();

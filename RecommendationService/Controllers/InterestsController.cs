@@ -92,6 +92,10 @@ namespace RecommendationService.Controllers
                 Interest fromDb = await _service.Add(interest);
                 return CreatedAtAction("GetInterest", new { id = fromDb.Id }, fromDb);
             }
+            catch(EntityAlreadyExists<Interest> ex)
+            {
+                return Ok(ex.Entity);
+            }
             catch (AddedEntityIsNotAnInterest ex)
             {
                 return BadRequest(ex.Message);

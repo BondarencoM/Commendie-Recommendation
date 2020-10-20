@@ -81,6 +81,10 @@ namespace RecommendationService.Controllers
                 Persona fromDb = await _personas.Add(persona);
                 return CreatedAtAction("GetPersona", new { id = fromDb.Id }, fromDb);
             }
+            catch(EntityAlreadyExists<Persona> ex)
+            {
+                return Ok(ex.Entity);
+            }
             catch (AddedEntityIsNotHuman ex)
             {
                 return BadRequest(ex.Message);

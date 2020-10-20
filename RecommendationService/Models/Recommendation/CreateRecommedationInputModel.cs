@@ -10,8 +10,8 @@ namespace RecommendationService.Models.Recommendations
 {
     public class CreateRecommedationInputModel
     {
-        public CreatePersonaInputModel Persona {get; set;}
-        public CreateInterestInputModel Interest {get; set;}
+        public long PersonaId {get; set;}
+        public long InterestId {get; set;}
         public string Context { get; set; }
     }
 }

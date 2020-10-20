@@ -41,23 +41,18 @@ namespace RecommendationService.Services
         {
 
             var alreadyExists = await db.Recommendation.AsQueryable()
-                                        .Where(r => r.Interest.WikiId == input.Interest.WikiId)
-                                        .Where(r => r.Persona.WikiId == input.Persona.WikiId)
+                                        .Where(r => r.InterestId == input.InterestId)
+                                        .Where(r => r.PersonaId == input.PersonaId)
                                         .SingleOrDefaultAsync();
             if(alreadyExists != null)
             {
                 throw new EntityAlreadyExists<Recommendation>(alreadyExists);
             }
-            //TODO: For now is synchronous, find a way to run this asynchronously
-            Task<Persona> getPersona = PersonasService.GetOrCreate(input.Persona);
-            Persona persona = await getPersona;
-            Task<Interest> getInterest = InterestsService.GetOrCreate(input.Interest);
-            Interest interest = await getInterest;
 
             var recommendation = new Recommendation()
             {
-                Interest = interest,
-                Persona = persona,
+                InterestId = input.InterestId,
+                PersonaId = input.PersonaId,
                 Context = input.Context,
                 AddedBy = PrincipalUsername,
                 CreatedAt = DateTime.Now,

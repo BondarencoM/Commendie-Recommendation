@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RecommendationService.Models;
+using RecommendationService.Models.Exceptions;
 using RecommendationService.Models.Personas;
 using RecommendationService.Services.Interfaces;
 using System;
@@ -35,9 +36,16 @@ namespace RecommendationService.Services
             return await db.Personas.FindAsync(id);
         }
 
-        public async Task<Persona> Add(CreatePersonaInputModel persona)
+        public async Task<Persona> Add(CreatePersonaInputModel input)
         {
-            Persona model = await scrappingService.ScrapePersonaDetails(persona.WikiId);
+
+            Persona currentVersion = await db.Personas.AsQueryable()
+                                                .Where(p => p.WikiId == input.WikiId)
+                                                .SingleOrDefaultAsync();
+            if (currentVersion != null)
+                throw new EntityAlreadyExists<Persona>(currentVersion);
+
+            Persona model = await scrappingService.ScrapePersonaDetails(input.WikiId);
             model.AddedBy = PrincipalUsername;
             var fromDb = db.Add(model);
             await db.SaveChangesAsync();

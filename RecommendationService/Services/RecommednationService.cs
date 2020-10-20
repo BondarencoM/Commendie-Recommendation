@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RecommendationService.Models;
 using RecommendationService.Models.Exceptions;
@@ -9,6 +10,7 @@ using RecommendationService.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace RecommendationService.Services
@@ -21,11 +23,18 @@ namespace RecommendationService.Services
 
         private IPersonasService PersonasService => _services.GetService<IPersonasService>();
         private IInterestService InterestsService => _services.GetService<IInterestService>();
+        private readonly IPrincipal _principal;
 
-        public RecommednationService(DatabaseContext db, IServiceProvider services)
+        private string PrincipalUsername => _principal.Identity.Name;
+
+        public RecommednationService(
+            DatabaseContext db, 
+            IServiceProvider services,
+            IPrincipal principal)
         {
             this.db = db;
             _services = services;
+            _principal = principal;
         }
 
         public async Task<Recommendation> Add(CreateRecommedationInputModel input)
@@ -49,8 +58,9 @@ namespace RecommendationService.Services
             {
                 Interest = interest,
                 Persona = persona,
-                CreatedAt = DateTime.Now,
                 Context = input.Context,
+                AddedBy = PrincipalUsername,
+                CreatedAt = DateTime.Now,
             };
 
             var fromDb = db.Recommendation.Add(recommendation);

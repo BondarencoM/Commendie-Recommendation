@@ -19,6 +19,8 @@ using RecommendationService.Services.Interfaces;
 using RecommendationService.Services;
 using WikiClientLibrary.Client;
 using WikiClientLibrary.Sites;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Http;
 
 namespace RecommendationService
 {
@@ -41,7 +43,6 @@ namespace RecommendationService
             .AddJwtBearer("Bearer", options =>
             {
                 options.Authority = "http://authenticationservice";
-
                 // Todo: HUGE PROBLEM, MAKE HHTTPS WORK somehow
                 options.RequireHttpsMetadata = false;
 
@@ -62,6 +63,9 @@ namespace RecommendationService
                         .AllowAnyMethod();
                 });
             });
+
+            services.AddHttpContextAccessor();
+            services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
 
             services.AddScoped( 
                 sv => new WikiClient{ ClientUserAgent = "WCLQuickStart/1.0 bondarencom" }

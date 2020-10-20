@@ -7,6 +7,7 @@ using RecommendationService.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using WikiClientLibrary.Sites;
 
@@ -16,11 +17,15 @@ namespace RecommendationService.Services
     {
         private readonly DatabaseContext db;
         private readonly IInterestScrappingService _scrappingService;
+        private readonly IPrincipal _principal;
 
-        public InterestService(DatabaseContext db, IInterestScrappingService scrappingService)
+        private string PrincipalUsername => _principal.Identity.Name;
+
+        public InterestService(DatabaseContext db, IInterestScrappingService scrappingService, IPrincipal principal)
         {
             this.db = db;
             _scrappingService = scrappingService;
+            _principal = principal;
         }
 
         public async Task<List<Interest>> All()
@@ -37,6 +42,7 @@ namespace RecommendationService.Services
         {
 
             Interest interest = await _scrappingService.ScrapeInterestDetails(model.WikiId);
+            interest.AddedBy = PrincipalUsername;
             var fromDb = db.Interests.Add(interest);
             await db.SaveChangesAsync();
 

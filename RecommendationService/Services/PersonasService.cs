@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace RecommendationService.Services
@@ -14,11 +15,15 @@ namespace RecommendationService.Services
     {
         private readonly DatabaseContext db;
         private readonly IPersonaScrappingService scrappingService;
+        private readonly IPrincipal _principal;
 
-        public PersonasService(DatabaseContext db, IPersonaScrappingService scrappingService)
+        private string PrincipalUsername => _principal.Identity.Name;
+
+        public PersonasService(DatabaseContext db, IPersonaScrappingService scrappingService, IPrincipal principal)
         {
             this.db = db;
             this.scrappingService = scrappingService;
+            _principal = principal;
         }
 
         public async Task<List<Persona>> All()
@@ -33,7 +38,7 @@ namespace RecommendationService.Services
         public async Task<Persona> Add(CreatePersonaInputModel persona)
         {
             Persona model = await scrappingService.ScrapePersonaDetails(persona.WikiId);
-
+            model.AddedBy = PrincipalUsername;
             var fromDb = db.Add(model);
             await db.SaveChangesAsync();
 

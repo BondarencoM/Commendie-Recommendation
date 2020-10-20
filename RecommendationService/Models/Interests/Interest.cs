@@ -1,17 +1,24 @@
 ﻿using System.Text.Json.Serialization;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace RecommendationService.Models.Interests
 {
     public class Interest
     {
+        [Key]
         public long Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
         public string Description { get; set; }
+
+        [Required]
         public string WikiId { get; set; }
 
-
+        [Required]
+        public string AddedBy { get; set; }
 
         [NotMapped]
         [JsonIgnore]
@@ -22,6 +29,7 @@ namespace RecommendationService.Models.Interests
         }
 
         [JsonPropertyName("type")]
+        [Required]
         public string TypeString { get; private set; }
     }
 

@@ -13,5 +13,6 @@ namespace RecommendationService.Services.Interfaces
         public Task<List<DiscoverPersonViewModel>> GetSuggestedForDiscovery(ushort limit);
 
         public Task<Persona> GetOrCreate(CreatePersonaInputModel input);
+        Task<PersonaWithInterestsViewModel> GetPersonaWithRecommendations(long id);
     }
 }

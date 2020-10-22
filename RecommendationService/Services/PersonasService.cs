@@ -76,5 +76,15 @@ namespace RecommendationService.Services
 
             return persona ?? await Add(input);
         }
+
+        public async Task<PersonaWithInterestsViewModel> GetPersonaWithRecommendations(long id)
+        {
+            return await db.Personas.AsQueryable()
+                               .Where(p => p.Id == id)
+                               .Include(p => p.Recommendations)
+                                   .ThenInclude(r => r.Interest)
+                               .Select(p => new PersonaWithInterestsViewModel(p))
+                               .SingleOrDefaultAsync();
+        }
     }
 }

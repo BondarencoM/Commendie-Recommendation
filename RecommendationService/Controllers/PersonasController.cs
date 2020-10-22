@@ -43,6 +43,12 @@ namespace RecommendationService.Controllers
             return await _personas.GetSuggestedForDiscovery(limit);
         }
 
+        [HttpGet("{id}/recommendations")]
+        public async Task<ActionResult<PersonaWithInterestsViewModel>> GetPersonaWithRecommendations(long id)
+        {
+            return await _personas.GetPersonaWithRecommendations(id);
+        }
+
 
         // GET: api/Personas/5
         [HttpGet("{id}")]

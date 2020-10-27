@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationService", "Au
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{82047727-E345-43F9-A566-5186F557AF9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecommendationService.Test", "RecommendationService.Test\RecommendationService.Test.csproj", "{8EB3536B-D947-41F7-A6C6-4209FC8BB63A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{82047727-E345-43F9-A566-5186F557AF9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82047727-E345-43F9-A566-5186F557AF9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82047727-E345-43F9-A566-5186F557AF9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EB3536B-D947-41F7-A6C6-4209FC8BB63A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EB3536B-D947-41F7-A6C6-4209FC8BB63A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EB3536B-D947-41F7-A6C6-4209FC8BB63A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EB3536B-D947-41F7-A6C6-4209FC8BB63A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

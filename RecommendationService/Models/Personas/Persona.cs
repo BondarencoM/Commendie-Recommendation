@@ -18,10 +18,10 @@ namespace RecommendationService.Models.Personas
 
         [JsonIgnore]
         public List<Recommendation> Recommendations { get; set; }
-        public string Description { get; internal set; }
+        public string Description { get; set; }
 
         [Required]
-        public string WikiId { get; internal set; }
+        public string WikiId { get; set; }
 
         [Required]
         public string AddedBy { get; set; }

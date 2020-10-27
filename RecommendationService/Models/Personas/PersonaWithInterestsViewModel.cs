@@ -11,7 +11,7 @@ namespace RecommendationService.Models.Personas
         public long Id { get; set; }
 
         public string Name { get; set; }
-        public string ImageURI { get; set; }
+        public string ImageUri { get; set; }
 
         public List<RecommendationWithInterestViewModel> Recommendations { get; set; }
         public string Description { get; internal set; }
@@ -20,15 +20,19 @@ namespace RecommendationService.Models.Personas
 
         public string AddedBy { get; set; }
 
+        public string WikipediaUri { get; set; }
+
+
         public PersonaWithInterestsViewModel(Persona p)
         {
             Id = p.Id;
             Name = p.Name;
-            ImageURI = p.ImageURI;
+            ImageUri = p.ImageUri;
             Recommendations = p.Recommendations.Select(r => new RecommendationWithInterestViewModel(r)).ToList();
             Description = p.Description;
             WikiId = p.WikiId;
             AddedBy = p.AddedBy;
+            WikipediaUri = p.WikipediaUri;
         }
     }
 }

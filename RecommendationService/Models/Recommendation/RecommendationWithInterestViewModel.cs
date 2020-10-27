@@ -15,6 +15,7 @@ namespace RecommendationService.Models.Recommendations
             Context = r.Context;
             Interest = r.Interest;
             AddedBy = r.AddedBy;
+            IsConfirmed = r.IsConfirmed;
         }
 
         public long Id { get; set; }
@@ -28,5 +29,7 @@ namespace RecommendationService.Models.Recommendations
         public Interest Interest { get; set; }
 
         public string AddedBy { get; set; }
+
+        public bool IsConfirmed { get; set; }
     }
 }

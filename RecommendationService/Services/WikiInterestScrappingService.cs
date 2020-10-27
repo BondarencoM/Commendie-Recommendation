@@ -36,6 +36,8 @@ namespace RecommendationService.Services
                 Name = entity.Labels["en"],
                 Description = entity.Descriptions["en"],
                 WikiId = entity.Id,
+                ImageUri = entity.ImageUris().FirstOrDefault()
+
             };
 
             model.Type = IdentifierToType.GetValueOrDefault(entity.InstanceOf());

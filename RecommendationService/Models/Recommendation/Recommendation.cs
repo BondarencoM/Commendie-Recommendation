@@ -24,5 +24,7 @@ namespace RecommendationService.Models.Recommendations
 
         [Required]
         public string AddedBy { get; set; }
+
+        public bool IsConfirmed { get; set; }
     }
 }

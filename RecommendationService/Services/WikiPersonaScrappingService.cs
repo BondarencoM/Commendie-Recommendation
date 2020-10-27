@@ -39,6 +39,8 @@ namespace RecommendationService.Services
                 Name = entity.Labels["en"],
                 Description = entity.Descriptions["en"],
                 WikiId = entity.Id,
+                ImageUri = entity.ImageUris().FirstOrDefault(),
+                WikipediaUri = entity.WikipediaLink(),
             };
 
             return model;

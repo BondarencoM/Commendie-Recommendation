@@ -38,7 +38,7 @@ namespace RecommendationService.Controllers
         /// <param name="limit">Query parameter for the number of personas to return</param>
         /// <returns></returns>
         [HttpGet("discover")]
-        public async Task<ActionResult<IEnumerable<DiscoverPersonViewModel>>> GetSuggestedPersonasForDiscovery(ushort limit = 12)
+        public async Task<ActionResult<IEnumerable<PersonaWithInterestsViewModel>>> GetSuggestedPersonasForDiscovery(ushort limit = 12)
         {
             return await _personas.GetSuggestedForDiscovery(limit);
         }

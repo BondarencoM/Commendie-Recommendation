@@ -17,7 +17,7 @@ namespace RecommendationService.Models
 
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Persona> Personas { get; set; }
-        public DbSet<Recommendation> Recommendation { get; set; }
+        public DbSet<Recommendation> Recommendations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -83,6 +83,7 @@ namespace RecommendationService.Models
             recommendations = recommendations.Select(r => { 
                 r.Context = "https://example.com/url-with-proof";
                 r.AddedBy = "@xtronik";
+                r.IsConfirmed = r.Id % 4 != 0;
                 return r; 
             }).ToList();
 

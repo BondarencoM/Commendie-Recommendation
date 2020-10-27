@@ -53,14 +53,19 @@ namespace RecommendationService.Services
             return fromDb.Entity;
         }
 
-        public async Task<List<DiscoverPersonViewModel>> GetSuggestedForDiscovery(ushort limit)
+        public async Task<List<PersonaWithInterestsViewModel>> GetSuggestedForDiscovery(ushort limit)
         {
-            return await db.Personas.AsQueryable()
-            .Take(limit)
+            var personas = await db.Personas.AsQueryable()
             .Include(p => p.Recommendations)
                 .ThenInclude(r => r.Interest)
-            .Select(p => new DiscoverPersonViewModel(p))
+            .OrderByDescending(p => p.Recommendations.LastOrDefault().CreatedAt)
+            .Take(limit)
+            .Select(p => new PersonaWithInterestsViewModel(p))
             .ToListAsync();
+
+            personas.ForEach(p => p.Recommendations =  p.Recommendations.OrderByDescending(r => r.CreatedAt).ToList());
+
+            return personas.OrderByDescending(p => p.Recommendations.FirstOrDefault()?.CreatedAt ?? new DateTime()).ToList();
         }
 
         public Task Update(long id, UpdatePersonaInputModel persona)
@@ -68,14 +73,6 @@ namespace RecommendationService.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Persona> GetOrCreate(CreatePersonaInputModel input)
-        {
-            var persona = await db.Personas.AsQueryable()
-                                    .Where(p => p.WikiId == input.WikiId)
-                                    .SingleOrDefaultAsync();
-
-            return persona ?? await Add(input);
-        }
 
         public async Task<PersonaWithInterestsViewModel> GetPersonaWithRecommendations(long id)
         {

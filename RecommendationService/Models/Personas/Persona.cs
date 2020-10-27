@@ -14,7 +14,7 @@ namespace RecommendationService.Models.Personas
 
         [Required]
         public string Name { get; set; }
-        public string ImageURI { get; set; }
+        public string ImageUri { get; set; }
 
         [JsonIgnore]
         public List<Recommendation> Recommendations { get; set; }
@@ -25,5 +25,7 @@ namespace RecommendationService.Models.Personas
 
         [Required]
         public string AddedBy { get; set; }
+
+        public string WikipediaUri { get; set; }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using RecommendationService.Models.Wikibase;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using WikiClientLibrary.Sites;
 using WikiClientLibrary.Wikibase;
 
 namespace RecommendationService.Extensions
@@ -19,10 +21,20 @@ namespace RecommendationService.Extensions
             if (entity.Claims.Count == 0)
                 return null;
 
-            return entity.Claims
-                        .Where(c => c.MainSnak.PropertyId == WikibaseProperty.InstanceOf)
+            return entity.Claims[WikibaseProperty.InstanceOf]
                         .FirstOrDefault()
                         ?.MainSnak.DataValue.ToString() ?? null;
+        }
+
+        public static IEnumerable<string> ImageUris (this Entity entity)
+        {
+            return entity.Claims[WikibaseProperty.Image]
+                .Select( c => $"https://commons.wikimedia.org/wiki/Special:FilePath/{c.MainSnak.DataValue}");
+        }
+
+        public static string WikipediaLink (this Entity entity)
+        {
+            return "https://en.wikipedia.org/wiki/" + entity.SiteLinks[WikiSites.EnglishWikipedia].Title;
         }
     }
 }

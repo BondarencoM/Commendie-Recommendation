@@ -40,7 +40,7 @@ namespace RecommendationService.Services
         public async Task<Recommendation> Add(CreateRecommedationInputModel input)
         {
 
-            var alreadyExists = await db.Recommendation.AsQueryable()
+            var alreadyExists = await db.Recommendations.AsQueryable()
                                         .Where(r => r.InterestId == input.InterestId)
                                         .Where(r => r.PersonaId == input.PersonaId)
                                         .SingleOrDefaultAsync();
@@ -58,7 +58,7 @@ namespace RecommendationService.Services
                 CreatedAt = DateTime.Now,
             };
 
-            var fromDb = db.Recommendation.Add(recommendation);
+            var fromDb = db.Recommendations.Add(recommendation);
 
             await db.SaveChangesAsync();
 
@@ -67,12 +67,12 @@ namespace RecommendationService.Services
 
         public async Task<List<Recommendation>> All()
         {
-            return await db.Recommendation.AsQueryable().ToListAsync();
+            return await db.Recommendations.AsQueryable().ToListAsync();
         }
 
         public async Task<Recommendation> Find(long id)
         {
-            return await db.Recommendation
+            return await db.Recommendations
                                 .Include(r => r.Interest)
                                 .Include(r => r.Persona)
                                 .Where(r => r.Id == id)

@@ -19,21 +19,16 @@ namespace RecommendationService.Services
     {
 
         private readonly DatabaseContext db;
-        private readonly IServiceProvider _services;
 
-        private IPersonasService PersonasService => _services.GetService<IPersonasService>();
-        private IInterestService InterestsService => _services.GetService<IInterestService>();
         private readonly IPrincipal _principal;
 
         private string PrincipalUsername => _principal.Identity.Name;
 
         public RecommednationService(
-            DatabaseContext db, 
-            IServiceProvider services,
+            DatabaseContext db,
             IPrincipal principal)
         {
             this.db = db;
-            _services = services;
             _principal = principal;
         }
 

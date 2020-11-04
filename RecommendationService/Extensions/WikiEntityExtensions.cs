@@ -11,12 +11,12 @@ namespace RecommendationService.Extensions
 {
     public static class WikiEntityExtensions
     {
-        public static bool IsHuman(this Entity entity)
+        public static bool IsHuman(this IEntity entity)
         {
             return entity.InstanceOf() == "Q5";  // Q5 is the identifier for 'human'
         }
 
-        public static string InstanceOf(this Entity entity)
+        public static string InstanceOf(this IEntity entity)
         {
             if (entity.Claims.Count == 0)
                 return null;
@@ -26,13 +26,13 @@ namespace RecommendationService.Extensions
                         ?.MainSnak.DataValue.ToString() ?? null;
         }
 
-        public static IEnumerable<string> ImageUris (this Entity entity)
+        public static IEnumerable<string> ImageUris (this IEntity entity)
         {
             return entity.Claims[WikibaseProperty.Image]
                 .Select( c => $"https://commons.wikimedia.org/wiki/Special:FilePath/{c.MainSnak.DataValue}");
         }
 
-        public static string WikipediaLink (this Entity entity)
+        public static string WikipediaLink (this IEntity entity)
         {
             return "https://en.wikipedia.org/wiki/" + entity.SiteLinks[WikiSites.EnglishWikipedia].Title;
         }

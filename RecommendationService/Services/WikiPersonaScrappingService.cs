@@ -17,19 +17,17 @@ namespace RecommendationService.Services
 {
     public class WikiPersonaScrappingService : IPersonaScrappingService
     {
-        private readonly WikiSite wiki;
+        private readonly IWikiEntityBuilderService wiki;
 
-        public WikiPersonaScrappingService(WikiSite wiki)
+        public WikiPersonaScrappingService(IWikiEntityBuilderService wiki)
         {
             this.wiki = wiki;
         }
 
         public async Task<Persona> ScrapePersonaDetails(string wikiId)
         {
-            await wiki.Initialization;
-
-            var entity = new Entity(wiki, wikiId);
-            await entity.RefreshAsync(EntityQueryOptions.FetchAllProperties);
+            
+            IEntity entity = await wiki.GetEntity(wikiId);
 
             if (entity.IsHuman() == false) 
                 throw new AddedEntityIsNotHuman(entity);

@@ -11,6 +11,7 @@ using WikiClientLibrary.Wikibase;
 using RecommendationService.Models.Wikibase;
 using RecommendationService.Extensions;
 using RecommendationService.Models.Exceptions;
+using WikiClientLibrary;
 
 namespace RecommendationService.Services
 {
@@ -28,7 +29,15 @@ namespace RecommendationService.Services
             await wiki.Initialization;
 
             var entity = new Entity(wiki, wikiId);
-            await entity.RefreshAsync(EntityQueryOptions.FetchAllProperties);
+            try
+            {
+                await entity.RefreshAsync(EntityQueryOptions.FetchAllProperties);
+            }
+            catch (OperationFailedException e)
+            {
+                if (e.Message.Contains("no-such-entity"))
+                    throw new EntityNotFoundException(e.Message);
+            }
 
 
             var model = new Interest()
@@ -40,16 +49,21 @@ namespace RecommendationService.Services
 
             };
 
-            model.Type = IdentifierToType.GetValueOrDefault(entity.InstanceOf());
+            string interestType = entity.InstanceOf()
+                                .Intersect(IdentifierToType.Keys)
+                                .FirstOrDefault();
 
-            if (model.Type == null)
+            if (interestType == null)
                 throw new AddedEntityIsNotAnInterest(entity);
+
+            model.Type = IdentifierToType.GetValueOrDefault(interestType);
+
 
             return model;
         }
 
 
-        private Dictionary<string, InterestType?> IdentifierToType = new Dictionary<string, InterestType?>
+        private readonly Dictionary<string, InterestType?>  IdentifierToType = new Dictionary<string, InterestType?>
         {
             { Books.Anthalogy, InterestType.Book },
             { Books.Book, InterestType.Book },

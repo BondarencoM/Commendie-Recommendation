@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecommendationService.Models;
 using RecommendationService.Models.Exceptions;
+using RecommendationService.Models.HttpResponseViewModel;
 using RecommendationService.Models.Personas;
 using RecommendationService.Services.Interfaces;
 
@@ -93,7 +94,11 @@ namespace RecommendationService.Controllers
             }
             catch (AddedEntityIsNotHuman ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorMessage(ex.Message));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return BadRequest(new ErrorMessage(ex.Message));
             }
 
         }        

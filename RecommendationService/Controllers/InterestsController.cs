@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecommendationService.Models;
 using RecommendationService.Models.Exceptions;
+using RecommendationService.Models.HttpResponseViewModel;
 using RecommendationService.Models.Interests;
 using RecommendationService.Services;
 using RecommendationService.Services.Interfaces;
@@ -98,14 +99,19 @@ namespace RecommendationService.Controllers
             }
             catch (AddedEntityIsNotAnInterest ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorMessage(ex.Message));
             }
+            catch (EntityNotFoundException ex)
+            {
+                return BadRequest(new ErrorMessage(ex.Message));
+            }
+
         }
 
         // DELETE: api/Interests/5
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Interest>> DeleteInterest(long id)
+        public void DeleteInterest(long id)
         {
             throw new NotImplementedException();
             //var interest = await _context.Interests.FindAsync(id);

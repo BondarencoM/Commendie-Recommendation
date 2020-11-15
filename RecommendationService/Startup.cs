@@ -73,7 +73,6 @@ namespace RecommendationService
             services.AddScoped( 
                 sv => new WikiSite(sv.GetService<WikiClient>(), "https://www.wikidata.org/w/api.php")
             );
-            services.AddScoped<IWikiEntityBuilderService, WikiEntityBuilderService>();
 
             services.AddScoped<IPersonaScrappingService, WikiPersonaScrappingService>();
             services.AddScoped<IInterestScrappingService, WikiInterestScrappingService>();

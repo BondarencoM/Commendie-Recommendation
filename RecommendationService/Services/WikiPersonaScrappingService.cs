@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using WikiClientLibrary;
 using WikiClientLibrary.Sites;
 using WikiClientLibrary.Wikibase;
 
@@ -17,17 +18,27 @@ namespace RecommendationService.Services
 {
     public class WikiPersonaScrappingService : IPersonaScrappingService
     {
-        private readonly IWikiEntityBuilderService wiki;
+        private readonly WikiSite wiki;
 
-        public WikiPersonaScrappingService(IWikiEntityBuilderService wiki)
+        public WikiPersonaScrappingService(WikiSite wiki)
         {
             this.wiki = wiki;
         }
 
         public async Task<Persona> ScrapePersonaDetails(string wikiId)
         {
-            
-            IEntity entity = await wiki.GetEntity(wikiId);
+            await wiki.Initialization;
+
+            var entity = new Entity(wiki, wikiId);
+            try
+            {
+                await entity.RefreshAsync(EntityQueryOptions.FetchAllProperties);
+            }
+            catch(OperationFailedException e)
+            {
+                if (e.Message.Contains("no-such-entity"))
+                    throw new EntityNotFoundException(e.Message);
+            }
 
             if (entity.IsHuman() == false) 
                 throw new AddedEntityIsNotHuman(entity);

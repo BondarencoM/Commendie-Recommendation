@@ -340,3 +340,4 @@ ASALocalRun/
 healthchecksdb
 
 *.db
+**/Logs-Buffer

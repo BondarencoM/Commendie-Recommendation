@@ -20,6 +20,14 @@
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 	</PropertyGroup>
 
+
+	<ItemGroup>
+	  <Compile Remove="Logs-Buffer\**" />
+	  <Content Remove="Logs-Buffer\**" />
+	  <EmbeddedResource Remove="Logs-Buffer\**" />
+	  <None Remove="Logs-Buffer\**" />
+	</ItemGroup>
+
 	<ItemGroup>
     <PackageReference Include="CXuesong.MW.WikiClientLibrary.Wikibase" Version="0.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.8" />
@@ -42,6 +50,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
+    <PackageReference Include="Serilog.Formatting.Elasticsearch" Version="8.4.1" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+    <PackageReference Include="Serilog.Sinks.Http" Version="7.2.0" />
   </ItemGroup>
 
 

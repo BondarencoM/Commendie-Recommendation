@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using Serilog.Formatting.Elasticsearch;
+using Serilog.Sinks.Http.BatchFormatters;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
 using System.Linq;
@@ -25,13 +27,14 @@ namespace AuthenticationService
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
                 .Enrich.FromLogContext()
-                // uncomment to write to Azure diagnostics stream
-                //.WriteTo.File(
-                //    @"D:\home\LogFiles\Application\identityserver.txt",
-                //    fileSizeLimitBytes: 1_000_000,
-                //    rollOnFileSizeLimit: true,
-                //    shared: true,
-                //    flushToDiskInterval: TimeSpan.FromSeconds(1))
+                .Enrich.WithProperty("ServiceOfOrigin", "authentication-service")
+                .WriteTo.DurableHttpUsingFileSizeRolledBuffers(
+                    requestUri: "http://commendie-elk-vm.westeurope.cloudapp.azure.com:5602/",
+                    batchFormatter: new ArrayBatchFormatter(),
+                    textFormatter: new ElasticsearchJsonFormatter(),
+                    bufferBaseFileName: "Logs-Buffer/Buffer"
+                )
+                .WriteTo.Console()
                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
                 .CreateLogger();
 

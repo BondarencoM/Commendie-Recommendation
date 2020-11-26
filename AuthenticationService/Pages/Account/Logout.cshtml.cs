@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AuthenticationService.Models;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authorization;
-using AuthenticationService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using IdentityServer4.Services;
-using Microsoft.AspNetCore.Authentication;
-using IdentityServer4.Events;
-using IdentityServer4.Extensions;
+using System.Threading.Tasks;
 
 namespace AuthenticationService.Areas.Identity.Pages.Account
 {
@@ -24,8 +18,8 @@ namespace AuthenticationService.Areas.Identity.Pages.Account
         private readonly IEventService _events;
 
         public LogoutModel(
-            SignInManager<ApplicationUser> signInManager, 
-            ILogger<LogoutModel> logger, 
+            SignInManager<ApplicationUser> signInManager,
+            ILogger<LogoutModel> logger,
             IIdentityServerInteractionService interaction,
             IEventService events)
         {
@@ -39,7 +33,7 @@ namespace AuthenticationService.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGet(string logoutId = null)
         {
-            if (User?.Identity.IsAuthenticated != true) 
+            if (User?.Identity.IsAuthenticated != true)
                 return LocalRedirect("/");
 
             var context = await _interaction.GetLogoutContextAsync(logoutId);

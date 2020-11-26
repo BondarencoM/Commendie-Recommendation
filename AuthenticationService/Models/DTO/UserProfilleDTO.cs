@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace AuthenticationService.Models.DTO
+﻿namespace AuthenticationService.Models.DTO
 {
-    class  UserProfilleDTO
+    class UserProfilleDTO
     {
         public string Username { get; set; }
 

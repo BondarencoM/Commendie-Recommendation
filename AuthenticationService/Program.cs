@@ -21,11 +21,11 @@ namespace AuthenticationService
         public static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
+               /* .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)*/
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("ServiceOfOrigin", "authentication-service")
                 .WriteTo.DurableHttpUsingFileSizeRolledBuffers(

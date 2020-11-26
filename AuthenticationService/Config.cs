@@ -3,7 +3,9 @@
 
 
 using IdentityServer4.Models;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AuthenticationService
 {
@@ -30,22 +32,22 @@ namespace AuthenticationService
             };
 
 
-        public static IEnumerable<Client> Clients =>
+        public static IEnumerable<Client> Clients (IConfiguration conf) =>
             new Client[]
             {
                 new Client
                 {
                     ClientId = "angular-app",
                     ClientName = "Commendie Web application",
-                    
+
                     RequireClientSecret = false,
 
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
-                    
-                    RedirectUris = { "http://localhost:4200/auth-callback", "http://localhost:4200/auth-silent-callback" },
-                    PostLogoutRedirectUris = { "http://localhost:4200/auth-signout-callback" },
-                    AllowedCorsOrigins = { "http://localhost:4200" },
+
+                    RedirectUris = conf.GetSection("Clients:RedirectUris").GetChildren().Select(s => s.Value).ToArray(),
+                    PostLogoutRedirectUris = conf.GetSection("Clients:PostLogoutUris").GetChildren().Select(s => s.Value).ToArray(),
+                    AllowedCorsOrigins = conf.GetSection("Clients:Cors").GetChildren().Select(s => s.Value).ToArray(),
 
 
                     AllowOfflineAccess = true,

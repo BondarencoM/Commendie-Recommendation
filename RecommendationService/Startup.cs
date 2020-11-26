@@ -42,7 +42,7 @@ namespace RecommendationService
             services.AddAuthentication("Bearer")
             .AddJwtBearer("Bearer", options =>
             {
-                options.Authority = "http://authenticationservice";
+                options.Authority = Configuration["Services:AuthenticationService"];
                 // Todo: HUGE PROBLEM, MAKE HHTTPS WORK somehow
                 options.RequireHttpsMetadata = false;
 

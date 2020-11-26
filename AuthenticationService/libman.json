@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery@3.3.1",
+      "files": [ "core.js", "jquery.js", "jquery.slim.min.js", "jquery.slim.min.map" ],
+      "destination": "wwwroot/lib/jquery/dist"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "bootstrap@4.5.2",
+      "destination": "wwwroot/lib/bootstrap/"
+    }
+  ]
+}

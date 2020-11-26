@@ -20,7 +20,7 @@ jobs:
     - name: Build
       run: dotnet build Commendie.Backends.sln --configuration Release --no-restore
     - name: Test
-      run: dotnet test Commendie.Backends.sln --no-restore --no-build --verbosity normal
+      run: dotnet test Commendie.Backends.sln --no-restore --no-build --verbosity d
     - name: Login to DockerHub
       uses: docker/login-action@v1
       with:

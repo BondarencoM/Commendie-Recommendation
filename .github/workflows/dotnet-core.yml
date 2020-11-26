@@ -16,8 +16,8 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore Commendie.Backends.sln
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build Commendie.Backends.sln --configuration Release --no-restore
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test Commendie.Backends.sln --no-restore --verbosity normal

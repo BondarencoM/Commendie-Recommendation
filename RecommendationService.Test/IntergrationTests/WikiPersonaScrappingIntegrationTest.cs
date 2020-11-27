@@ -33,6 +33,7 @@ namespace RecommendationService.Test.IntergrationTests
             Service = new WikiPersonaScrappingService(WikiSite);
         }
 
+        [Fact]
         public async Task ScrapePersonaDetails_FindsPersonById()
         {
             Persona actual = await Service.ScrapePersonaDetails(DavidBowieId);
@@ -55,6 +56,7 @@ namespace RecommendationService.Test.IntergrationTests
             actual.ImageUri.Should().MatchRegex(@"https://commons\.wikimedia\.org/wiki/Special:FilePath/.+\..+$", "because there must be a link to an image");
         }
 
+        [Fact]
         public async Task ScrapePersonaDetails_FindsPersonWithMultipleInstanceOfValues()
         {
             Persona actual = await Service.ScrapePersonaDetails(GeorgakisId);

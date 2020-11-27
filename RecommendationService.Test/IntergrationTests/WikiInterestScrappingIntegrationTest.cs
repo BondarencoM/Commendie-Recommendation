@@ -75,14 +75,12 @@ namespace RecommendationService.Test.IntergrationTests
                 "because we scrapped info for Teenage Mutant Ninja Turtles");
         }
 
-        [Fact]
         public void ScrapePersonaDetails_InexistantPersona()
         {
             Service.Awaiting(s => s.ScrapeInterestDetails("Q999999999999999"))
                 .Should().Throw<EntityNotFoundException>($"because entity with id Q999999999999999 doesn't exist");
         }
 
-        [Fact]
         public void ScrapePersonaDetails_ThrowsIfItsNotAValidInterest()
         {
             Service.Awaiting(s => s.ScrapeInterestDetails(SoftwareEngineering))

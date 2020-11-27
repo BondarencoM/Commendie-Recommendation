@@ -75,16 +75,18 @@ namespace RecommendationService.Test.IntergrationTests
                 "because we scrapped info for Teenage Mutant Ninja Turtles");
         }
 
-        public void ScrapePersonaDetails_InexistantPersona()
+        [Fact]
+        public async Task ScrapePersonaDetails_InexistantPersona()
         {
-            Service.Awaiting(s => s.ScrapeInterestDetails("Q999999999999999"))
-                .Should().Throw<EntityNotFoundException>($"because entity with id Q999999999999999 doesn't exist");
+            await Service.Awaiting(s => s.ScrapeInterestDetails("Q999999999999999"))
+                .Should().ThrowAsync<EntityNotFoundException>($"because entity with id Q999999999999999 doesn't exist");
         }
 
-        public void ScrapePersonaDetails_ThrowsIfItsNotAValidInterest()
+        [Fact]
+        public async Task ScrapePersonaDetails_ThrowsIfItsNotAValidInterest()
         {
-            Service.Awaiting(s => s.ScrapeInterestDetails(SoftwareEngineering))
-                .Should().Throw<AddedEntityIsNotAnInterest>($"because entity with id {SoftwareEngineering} is not a Book, Movie, Game or other supported interest type");
+            await Service.Awaiting(s => s.ScrapeInterestDetails(SoftwareEngineering))
+                .Should().ThrowAsync<AddedEntityIsNotAnInterest>($"because entity with id {SoftwareEngineering} is not a Book, Movie, Game or other supported interest type");
         }
     }
 }

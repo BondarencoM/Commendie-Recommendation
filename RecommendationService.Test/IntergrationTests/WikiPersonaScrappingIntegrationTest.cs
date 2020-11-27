@@ -75,16 +75,18 @@ namespace RecommendationService.Test.IntergrationTests
                 "because we scrapped info for Georgakis Mourdoukoutas");
         }
 
-        public void ScrapePersonaDetails_InexistantPersona()
+        [Fact]
+        public async Task ScrapePersonaDetails_InexistantPersona()
         {
-            Service.Awaiting(s => s.ScrapePersonaDetails("Q999999999999999"))
-                .Should().Throw<EntityNotFoundException>($"because entity with id Q999999999999999 shouldn't exist");
+            await Service.Awaiting(s => s.ScrapePersonaDetails("Q999999999999999"))
+                .Should().ThrowAsync<EntityNotFoundException>($"because entity with id Q999999999999999 shouldn't exist");
         }
 
-        public void ScrapePersonaDetails_ThrowsIfItsNotAHuman()
+        [Fact]
+        public async Task ScrapePersonaDetails_ThrowsIfItsNotAHuman()
         {
-            Service.Awaiting(s => s.ScrapePersonaDetails(LaikaDogId))
-                .Should().Throw<AddedEntityIsNotHuman>($"because entity with id {LaikaDogId} is a dog and not a human");
+            await Service.Awaiting(s => s.ScrapePersonaDetails(LaikaDogId))
+                .Should().ThrowAsync<AddedEntityIsNotHuman>($"because entity with id {LaikaDogId} is a dog and not a human");
         }
     }
 }

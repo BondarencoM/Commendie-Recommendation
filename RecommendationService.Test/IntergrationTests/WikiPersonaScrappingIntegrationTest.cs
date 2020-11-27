@@ -33,7 +33,6 @@ namespace RecommendationService.Test.IntergrationTests
             Service = new WikiPersonaScrappingService(WikiSite);
         }
 
-        [Fact]
         public async Task ScrapePersonaDetails_FindsPersonById()
         {
             Persona actual = await Service.ScrapePersonaDetails(DavidBowieId);
@@ -56,7 +55,6 @@ namespace RecommendationService.Test.IntergrationTests
             actual.ImageUri.Should().MatchRegex(@"https://commons\.wikimedia\.org/wiki/Special:FilePath/.+\..+$", "because there must be a link to an image");
         }
 
-        [Fact]
         public async Task ScrapePersonaDetails_FindsPersonWithMultipleInstanceOfValues()
         {
             Persona actual = await Service.ScrapePersonaDetails(GeorgakisId);
@@ -75,14 +73,12 @@ namespace RecommendationService.Test.IntergrationTests
                 "because we scrapped info for Georgakis Mourdoukoutas");
         }
 
-        [Fact]
         public void ScrapePersonaDetails_InexistantPersona()
         {
             Service.Awaiting(s => s.ScrapePersonaDetails("Q999999999999999"))
                 .Should().Throw<EntityNotFoundException>($"because entity with id Q999999999999999 shouldn't exist");
         }
 
-        [Fact]
         public void ScrapePersonaDetails_ThrowsIfItsNotAHuman()
         {
             Service.Awaiting(s => s.ScrapePersonaDetails(LaikaDogId))

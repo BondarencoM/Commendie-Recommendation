@@ -19,24 +19,26 @@ namespace RecommendationService.Test
 {
     public class PersonaServiceTest: IDisposable
     {
-        private readonly PersonasService Service;
-        private readonly DatabaseContext db;
+        private PersonasService Service;
+        private DatabaseContext db;
         private readonly ITestOutputHelper Output;
 
-        private readonly Mock<IPersonaScrappingService> mockScrapping;
-        private readonly Mock<IPrincipal> mockPrincipal;
+        private Mock<IPersonaScrappingService> mockScrapping;
+        private Mock<IPrincipal> mockPrincipal;
 
-        private readonly string TestingUser = "TestingUser";
+        private string TestingUser = "TestingUser";
 
-        public  PersonaServiceTest(ITestOutputHelper output)
+        public PersonaServiceTest(ITestOutputHelper output)
         {
             Output = output;
+        }
 
-            db = ContextBuilder.GetUniqueInMemory().Result;
+        private async Task Setup()
+        {
+            db = await ContextBuilder.GetUniqueInMemory();
 
             mockScrapping = new Mock<IPersonaScrappingService>();
             mockPrincipal = new Mock<IPrincipal>();
-
             mockPrincipal.Setup(p => p.Identity.Name).Returns(TestingUser);
 
             Service = new PersonasService(db, mockScrapping.Object, mockPrincipal.Object);
@@ -47,6 +49,8 @@ namespace RecommendationService.Test
         [Fact]
         public async Task All_ReturnsAllPersona()
         {
+            await Setup();
+
             var actual = await Service.All();
             actual.Should().BeEquivalentTo(db.Personas, because: "that's what we have in the database");
         }
@@ -54,6 +58,8 @@ namespace RecommendationService.Test
         [Fact]
         public async Task All_ReturnsEmptyWhenThereIsNoData()
         {
+            await Setup();
+
             db.RemoveRange(db.Personas);
             await db.SaveChangesAsync();
             (await Service.All())
@@ -63,6 +69,8 @@ namespace RecommendationService.Test
         [Fact]
         public async Task Find_ReturnsAPersona()
         {
+            await Setup();
+
             var actual = await Service.Find(1);
             actual.Should().BeEquivalentTo(db.Personas.Find(1L), because: "we're getting the person with id 1");
         }
@@ -70,6 +78,8 @@ namespace RecommendationService.Test
         [Fact]
         public async Task Find_ReturnsNullWhenNotFound()
         {
+            await Setup();
+
             var actual = await Service.Find(45665445665444L);
             actual.Should().BeNull("because there shouldn't be any user with that id");
         }
@@ -77,6 +87,8 @@ namespace RecommendationService.Test
         [Fact]
         public async Task Add_AddsNewPersonaToDb()
         {
+            await Setup();
+
             var wikiId = "Q999999";
             var newPersona = new CreatePersonaInputModel() { WikiId = wikiId };
 
@@ -112,8 +124,9 @@ namespace RecommendationService.Test
         }
 
         [Fact]
-        public void Add_ThrowsIfPersonaExists()
+        public async Task Add_ThrowsIfPersonaExists()
         {
+            await Setup();
 
             var wikiId = db.Personas.First().WikiId;
             var newPersona = new CreatePersonaInputModel() { WikiId = wikiId };
@@ -135,6 +148,8 @@ namespace RecommendationService.Test
         [Fact]
         public async Task GetPersonaWithRecommendations_ReturnsAPersona()
         {
+            await Setup();
+
             var actual = await Service.GetPersonaWithRecommendations(1);
             var expected = new PersonaWithInterestsViewModel(db.Personas.Find(1L));
 
@@ -144,6 +159,8 @@ namespace RecommendationService.Test
         [Fact]
         public async Task GetPersonaWithRecommendations_ReturnsNullIfNoneFound()
         {
+            await Setup();
+
             var actual = await Service.GetPersonaWithRecommendations(999);
             actual.Should().BeNull("because there shouldn't be any persona with that Id");
         }
@@ -151,6 +168,8 @@ namespace RecommendationService.Test
         [Fact]
         public async Task GetSuggestedForDiscovery_ReturnsPersonas()
         {
+            await Setup();
+
             ushort limit = 12;
             var actual = await Service.GetSuggestedForDiscovery(limit);
             actual.Should().HaveCount(Math.Min(limit, db.Personas.Count()));

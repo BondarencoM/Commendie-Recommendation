@@ -12,13 +12,13 @@ namespace ProfileService.Models
             Database.EnsureCreated();
         }
 
-        public DbSet<Profile> Profiles { get; set; }
+        public DbSet<UserProfile> Profiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             long ids = 1;
-            modelBuilder.Entity<Profile>().HasData(
-                new Profile() { Id = ids++, Username = "@root" }
+            modelBuilder.Entity<UserProfile>().HasData(
+                new UserProfile() { Id = ids++, Username = "@root" }
             );
         }
 

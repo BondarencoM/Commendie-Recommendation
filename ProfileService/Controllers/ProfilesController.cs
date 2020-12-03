@@ -22,14 +22,14 @@ namespace ProfileService.Controllers
 
         // GET: api/Profiles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Profile>>> GetProfiles()
+        public async Task<ActionResult<IEnumerable<UserProfile>>> GetProfiles()
         {
             return await db.Profiles.ToListAsync();
         }
 
         // GET: api/Profiles/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Profile>> GetProfile(long id)
+        public async Task<ActionResult<UserProfile>> GetProfile(long id)
         {
             var profile = await db.Profiles.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace ProfileService.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProfile(long id, Profile profile)
+        public async Task<IActionResult> PutProfile(long id, UserProfile profile)
         {
             if (id != profile.Id)
             {
@@ -77,7 +77,7 @@ namespace ProfileService.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Profile>> PostProfile(Profile profile)
+        public async Task<ActionResult<UserProfile>> PostProfile(UserProfile profile)
         {
             db.Profiles.Add(profile);
             await db.SaveChangesAsync();
@@ -87,7 +87,7 @@ namespace ProfileService.Controllers
 
         // DELETE: api/Profiles/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Profile>> DeleteProfile(long id)
+        public async Task<ActionResult<UserProfile>> DeleteProfile(long id)
         {
             var profile = await db.Profiles.FindAsync(id);
             if (profile == null)

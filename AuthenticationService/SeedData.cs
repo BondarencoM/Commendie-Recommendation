@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace AuthenticationService
 {
-    public class SeedData
+    public sealed class SeedData
     {
         public static void EnsureSeedData(string connectionString)
         {

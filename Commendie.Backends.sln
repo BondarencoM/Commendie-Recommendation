@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationService", "Au
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{82047727-E345-43F9-A566-5186F557AF9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecommendationService.Test", "RecommendationService.Test\RecommendationService.Test.csproj", "{8EB3536B-D947-41F7-A6C6-4209FC8BB63A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecommendationService.Test", "RecommendationService.Test\RecommendationService.Test.csproj", "{8EB3536B-D947-41F7-A6C6-4209FC8BB63A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7D1478B8-6FC9-4805-83CE-82101DC58FFC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

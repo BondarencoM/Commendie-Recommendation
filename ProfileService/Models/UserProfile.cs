@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProfileService.Models
 {
-    public class Profile
+    public class UserProfile
     {
         [Key]
         public long Id { get; set; }

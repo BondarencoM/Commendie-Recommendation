@@ -45,7 +45,7 @@ namespace RecommendationService.Services
                                                 .SingleOrDefaultAsync();
 
             if (currentVersion != null)
-                throw new EntityAlreadyExists<Interest>(currentVersion);
+                throw new EntityAlreadyExistsException<Interest>(currentVersion);
 
             Interest interest = await _scrappingService.ScrapeInterestDetails(input.WikiId);
             interest.AddedBy = PrincipalUsername;

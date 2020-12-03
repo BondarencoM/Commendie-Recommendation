@@ -11,16 +11,16 @@ namespace RecommendationService.Models.Personas
         public long Id { get; set; }
 
         public string Name { get; set; }
-        public string ImageUri { get; set; }
+        public Uri ImageUri { get; set; }
 
-        public List<RecommendationWithInterestViewModel> Recommendations { get; set; }
+        public ICollection<RecommendationWithInterestViewModel> Recommendations { get; set; }
         public string Description { get; internal set; }
 
         public string WikiId { get; internal set; }
 
         public string AddedBy { get; set; }
 
-        public string WikipediaUri { get; set; }
+        public Uri WikipediaUri { get; set; }
 
 
         public PersonaWithInterestsViewModel(Persona p)

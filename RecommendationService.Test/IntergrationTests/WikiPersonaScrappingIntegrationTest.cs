@@ -45,7 +45,7 @@ namespace RecommendationService.Test.IntergrationTests
                 Id = default,
                 Recommendations = null,
                 WikiId = DavidBowieId,
-                WikipediaUri = "https://en.wikipedia.org/wiki/David_Bowie",
+                WikipediaUri = new Uri("https://en.wikipedia.org/wiki/David_Bowie"),
             };
 
             actual.Should().BeEquivalentTo(expected,
@@ -53,7 +53,7 @@ namespace RecommendationService.Test.IntergrationTests
                 "because we scrapped info for David Bowie");
 
             actual.Description.Should().NotBeNullOrEmpty("because we don't know what the description will be but there must be some");
-            actual.ImageUri.Should().MatchRegex(@"https://commons\.wikimedia\.org/wiki/Special:FilePath/.+\..+$", "because there must be a link to an image");
+            actual.ImageUri.ToString().Should().MatchRegex(@"https://commons\.wikimedia\.org/wiki/Special:FilePath/.+\..+$", "because there must be a link to an image");
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace RecommendationService.Test.IntergrationTests
         public async Task ScrapePersonaDetails_ThrowsIfItsNotAHuman()
         {
             await Service.Awaiting(s => s.ScrapePersonaDetails(LaikaDogId))
-                .Should().ThrowAsync<AddedEntityIsNotHuman>($"because entity with id {LaikaDogId} is a dog and not a human");
+                .Should().ThrowAsync<AddedEntityIsNotHumanException>($"because entity with id {LaikaDogId} is a dog and not a human");
         }
     }
 }

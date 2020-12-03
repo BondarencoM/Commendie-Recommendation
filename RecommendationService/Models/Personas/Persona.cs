@@ -14,10 +14,10 @@ namespace RecommendationService.Models.Personas
 
         [Required]
         public string Name { get; set; }
-        public string ImageUri { get; set; }
+        public Uri ImageUri { get; set; }
 
         [JsonIgnore]
-        public List<Recommendation> Recommendations { get; set; }
+        public ICollection<Recommendation> Recommendations { get; set; }
         public string Description { get; set; }
 
         [Required]
@@ -26,6 +26,6 @@ namespace RecommendationService.Models.Personas
         [Required]
         public string AddedBy { get; set; }
 
-        public string WikipediaUri { get; set; }
+        public Uri WikipediaUri { get; set; }
     }
 }

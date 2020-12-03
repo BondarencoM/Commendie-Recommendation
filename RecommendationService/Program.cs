@@ -12,7 +12,7 @@ using Serilog.Sinks.Http.BatchFormatters;
 
 namespace RecommendationService
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {

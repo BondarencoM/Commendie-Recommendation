@@ -53,7 +53,7 @@ namespace RecommendationService.Test.IntergrationTests
                 "because we scrapped info for Moby-Dick");
 
             actual.Description.Should().NotBeNullOrEmpty("because we don't know what the description will be but there must be some");
-            actual.ImageUri.Should().MatchRegex(@"https://commons\.wikimedia\.org/wiki/Special:FilePath/.+\..+$", "because there must be a link to an image");
+            actual.ImageUri.ToString().Should().MatchRegex(@"https://commons\.wikimedia\.org/wiki/Special:FilePath/.+\..+$", "because there must be a link to an image");
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace RecommendationService.Test.IntergrationTests
         public async Task ScrapePersonaDetails_ThrowsIfItsNotAValidInterest()
         {
             await Service.Awaiting(s => s.ScrapeInterestDetails(SoftwareEngineering))
-                .Should().ThrowAsync<AddedEntityIsNotAnInterest>($"because entity with id {SoftwareEngineering} is not a Book, Movie, Game or other supported interest type");
+                .Should().ThrowAsync<AddedEntityIsNotAnInterestException>($"because entity with id {SoftwareEngineering} is not a Book, Movie, Game or other supported interest type");
         }
     }
 }

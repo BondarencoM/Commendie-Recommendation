@@ -44,6 +44,18 @@ namespace RecommendationService.Controllers
             return await _personas.GetSuggestedForDiscovery(limit);
         }
 
+        /// <summary>
+        /// Returns a list of the registered personas that match teh search parameter
+        /// </summary>
+        /// <param name="search">Query parameter for the number of personas to return</param>
+        /// <returns></returns>
+        [HttpGet("discover/{search}")]
+        public async Task<ActionResult<IEnumerable<PersonaWithInterestsViewModel>>> GetPersonasSearch(string search)
+        {
+            return await _personas.GetPersonasSearch(search);
+        }
+
+
         [HttpGet("{id}/recommendations")]
         public async Task<ActionResult<PersonaWithInterestsViewModel>> GetPersonaWithRecommendations(long id)
         {
@@ -88,11 +100,11 @@ namespace RecommendationService.Controllers
                 Persona fromDb = await _personas.Add(persona);
                 return CreatedAtAction("GetPersona", new { id = fromDb.Id }, fromDb);
             }
-            catch(EntityAlreadyExists<Persona> ex)
+            catch(EntityAlreadyExistsException<Persona> ex)
             {
                 return Ok(ex.Entity);
             }
-            catch (AddedEntityIsNotHuman ex)
+            catch (AddedEntityIsNotHumanException ex)
             {
                 return BadRequest(new ErrorMessage(ex.Message));
             }

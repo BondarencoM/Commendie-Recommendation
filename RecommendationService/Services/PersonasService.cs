@@ -36,16 +36,15 @@ namespace RecommendationService.Services
             return await db.Personas.FindAsync(id);
         }
 
-        public async Task<Persona> Add(CreatePersonaInputModel input)
+        public async Task<Persona> Add(CreatePersonaInputModel persona)
         {
-
             Persona currentVersion = await db.Personas.AsQueryable()
-                                                .Where(p => p.WikiId == input.WikiId)
+                                                .Where(p => p.WikiId == persona.WikiId)
                                                 .SingleOrDefaultAsync();
             if (currentVersion != null)
-                throw new EntityAlreadyExists<Persona>(currentVersion);
+                throw new EntityAlreadyExistsException<Persona>(currentVersion);
 
-            Persona model = await scrappingService.ScrapePersonaDetails(input.WikiId);
+            Persona model = await scrappingService.ScrapePersonaDetails(persona.WikiId);
             model.AddedBy = PrincipalUsername;
             var fromDb = db.Add(model);
             await db.SaveChangesAsync();
@@ -82,6 +81,11 @@ namespace RecommendationService.Services
                                    .ThenInclude(r => r.Interest)
                                .Select(p => new PersonaWithInterestsViewModel(p))
                                .SingleOrDefaultAsync();
+        }
+
+        public Task<List<PersonaWithInterestsViewModel>> GetPersonasSearch(string search)
+        {
+            throw new NotImplementedException();
         }
     }
 }

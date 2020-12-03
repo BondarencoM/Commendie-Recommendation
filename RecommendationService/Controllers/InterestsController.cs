@@ -93,11 +93,11 @@ namespace RecommendationService.Controllers
                 Interest fromDb = await _service.Add(interest);
                 return CreatedAtAction("GetInterest", new { id = fromDb.Id }, fromDb);
             }
-            catch(EntityAlreadyExists<Interest> ex)
+            catch(EntityAlreadyExistsException<Interest> ex)
             {
                 return Ok(ex.Entity);
             }
-            catch (AddedEntityIsNotAnInterest ex)
+            catch (AddedEntityIsNotAnInterestException ex)
             {
                 return BadRequest(new ErrorMessage(ex.Message));
             }
@@ -111,7 +111,7 @@ namespace RecommendationService.Controllers
         // DELETE: api/Interests/5
         [Authorize]
         [HttpDelete("{id}")]
-        public void DeleteInterest(long id)
+        public void DeleteInterest()
         {
             throw new NotImplementedException();
             //var interest = await _context.Interests.FindAsync(id);

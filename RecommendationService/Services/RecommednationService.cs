@@ -41,7 +41,7 @@ namespace RecommendationService.Services
                                         .SingleOrDefaultAsync();
             if(alreadyExists != null)
             {
-                throw new EntityAlreadyExists<Recommendation>(alreadyExists);
+                throw new EntityAlreadyExistsException<Recommendation>(alreadyExists);
             }
 
             var recommendation = new Recommendation()

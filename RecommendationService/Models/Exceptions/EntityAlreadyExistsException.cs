@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 
 namespace RecommendationService.Models.Exceptions
 {
-    public class EntityAlreadyExists<T> : Exception
+    public class EntityAlreadyExistsException<T> : Exception
     {
         public T Entity { get; set; }
 
-        public EntityAlreadyExists(T entity)
+        public EntityAlreadyExistsException(T entity)
         {
             Entity = entity;
         }
+
     }
 }

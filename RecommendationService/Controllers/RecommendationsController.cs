@@ -91,7 +91,7 @@ namespace RecommendationService.Controllers
             {
                 recommendation = await _service.Add(inputData);
             }
-            catch (EntityAlreadyExists<Recommendation> ex)
+            catch (EntityAlreadyExistsException<Recommendation> ex)
             {
                 return Ok(ex.Entity);
             }

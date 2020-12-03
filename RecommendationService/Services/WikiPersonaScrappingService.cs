@@ -25,23 +25,23 @@ namespace RecommendationService.Services
             this.wiki = wiki;
         }
 
-        public async Task<Persona> ScrapePersonaDetails(string wikiId)
+        public async Task<Persona> ScrapePersonaDetails(string identifier)
         {
             await wiki.Initialization;
 
-            var entity = new Entity(wiki, wikiId);
+            var entity = new Entity(wiki, identifier);
             try
             {
                 await entity.RefreshAsync(EntityQueryOptions.FetchAllProperties);
             }
             catch(OperationFailedException e)
             {
-                if (e.Message.Contains("no-such-entity"))
+                if (e.Message.Contains("no-such-entity", StringComparison.OrdinalIgnoreCase))
                     throw new EntityNotFoundException(e.Message);
             }
 
             if (entity.IsHuman() == false) 
-                throw new AddedEntityIsNotHuman(entity);
+                throw new AddedEntityIsNotHumanException(entity);
 
             var model = new Persona()
             {

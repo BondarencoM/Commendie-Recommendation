@@ -25,18 +25,18 @@ namespace RecommendationService.Extensions
                 .Select(c => c.MainSnak.DataValue.ToString());
         }
 
-        public static IEnumerable<string> ImageUris(this IEntity entity)
+        public static IEnumerable<Uri> ImageUris(this IEntity entity)
         {
             return entity.Claims[WikibaseProperty.Image]
-                .Select( c => $"https://commons.wikimedia.org/wiki/Special:FilePath/{c.MainSnak.DataValue}");
+                .Select( c => new Uri($"https://commons.wikimedia.org/wiki/Special:FilePath/{c.MainSnak.DataValue}"));
         }
 
-        public static string WikipediaLink (this IEntity entity)
+        public static Uri WikipediaLink (this IEntity entity)
         {
             try
             {
                 var title = entity.SiteLinks[WikiSites.EnglishWikipedia]?.Title?.Replace(' ', '_');
-                return "https://en.wikipedia.org/wiki/" + title;
+                return new Uri("https://en.wikipedia.org/wiki/" + title);
             }
             catch(KeyNotFoundException)
             {

@@ -85,8 +85,8 @@ namespace RecommendationService.Test
                 WikiId = wikiId,
                 Name = "John Doe",
                 Description = "Not a real person",
-                ImageUri = "SomeUrl.com",
-                WikipediaUri ="Wiki.com",
+                ImageUri = new Uri("https://SomeUrl.com"),
+                WikipediaUri = new Uri("https://Wiki.com"),
                 Recommendations = null,
                 AddedBy = TestingUser,
             };
@@ -96,8 +96,8 @@ namespace RecommendationService.Test
                 WikiId = wikiId,
                 Name = "John Doe",
                 Description = "Not a real person",
-                ImageUri = "SomeUrl.com",
-                WikipediaUri = "Wiki.com",
+                ImageUri = new Uri("https://SomeUrl.com"),
+                WikipediaUri = new Uri("https://Wiki.com"),
                 Recommendations = null,
             });
 
@@ -123,13 +123,13 @@ namespace RecommendationService.Test
                 WikiId = wikiId,
                 Name = "John Doe",
                 Description = "Not a real person",
-                ImageUri = "SomeUrl.com",
-                WikipediaUri = "Wiki.com",
+                ImageUri = new Uri("https://SomeUrl.com"),
+                WikipediaUri = new Uri("https://Wiki.com"),
                 Recommendations = null,
             });
 
             Service.Awaiting(s => s.Add(newPersona))
-                .Should().Throw<EntityAlreadyExists<Persona>>("because a persona with that wikiId already exists");
+                .Should().Throw<EntityAlreadyExistsException<Persona>>("because a persona with that wikiId already exists");
         }
 
         [Fact]

@@ -17,7 +17,7 @@ namespace RecommendationService.Models.Interests
         [Required]
         public string WikiId { get; set; }
 
-        public string ImageUri { get; set; }
+        public Uri ImageUri { get; set; }
 
         [Required]
         public string AddedBy { get; set; }

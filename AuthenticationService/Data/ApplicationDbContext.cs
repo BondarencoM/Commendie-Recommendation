@@ -10,8 +10,7 @@ namespace AuthenticationService.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
         {
-            if (Database.GetPendingMigrations().Any())
-                Database.Migrate();
+
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

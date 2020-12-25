@@ -29,7 +29,7 @@ namespace AuthenticationService.Areas.Identity.Pages.Account
             _events = events;
         }
 
-        public bool AutoLogoutAndRedirect { get; set; } = false;
+        public bool AutoLogoutAndRedirect { get; set; }
 
         public async Task<IActionResult> OnGet(string logoutId = null)
         {

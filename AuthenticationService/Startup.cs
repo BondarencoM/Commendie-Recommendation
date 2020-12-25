@@ -2,16 +2,15 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using AuthenticationService.Configs;
 using AuthenticationService.Data;
 using AuthenticationService.Models;
 using AuthenticationService.Services;
 using AuthenticationService.Services.Interfaces;
 using IdentityServer4;
-using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -111,7 +110,9 @@ namespace AuthenticationService
             {
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
-            }); 
+            });
+
+            app.MigrateDatabase();
         }
     }
 }

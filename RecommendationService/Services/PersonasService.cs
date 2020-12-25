@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace RecommendationService.Services
@@ -83,9 +84,50 @@ namespace RecommendationService.Services
                                .SingleOrDefaultAsync();
         }
 
-        public Task<List<PersonaWithInterestsViewModel>> GetPersonasSearch(string search)
+        public async Task<List<PersonaWithInterestsViewModel>> GetPersonasSearch(string search)
         {
-            throw new NotImplementedException();
+
+            if (IsWikiId(search))
+                return await db.Personas
+                    .AsQueryable()
+                    .Where(p => p.WikiId == search)
+                    .Include(p => p.Recommendations)
+                                   .ThenInclude(r => r.Interest)
+                    .Select((p => new PersonaWithInterestsViewModel(p)))
+                    .ToListAsync();
+            else
+                return await GetPersonasByNameSearch(search);
+
+
+        }
+
+        private static bool IsWikiId(string search) => Regex.IsMatch(search, "^Q[0-9]+$"); 
+
+        private async Task<List<PersonaWithInterestsViewModel>> GetPersonasByNameSearch(string search)
+        {
+            var terms = search.ToUpperInvariant().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            // Pad the list with dummy strings to make sure we don't go out of the range
+            // We will only look into teh first 5 words in the search
+            while (terms.Count < 6)
+                terms.Add("match_nothing");
+
+            var query = db.Personas
+                    .AsQueryable()
+                    .Where( p =>
+                        p.Name.ToUpperInvariant().Contains(terms[0]) ||
+                        p.Name.ToUpperInvariant().Contains(terms[1]) ||
+                        p.Name.ToUpperInvariant().Contains(terms[2]) ||
+                        p.Name.ToUpperInvariant().Contains(terms[3]) ||
+                        p.Name.ToUpperInvariant().Contains(terms[4]) 
+                    )
+                    .Take(40)
+                    .Include(p => p.Recommendations)
+                                   .ThenInclude(r => r.Interest)
+                    .Select(p => new PersonaWithInterestsViewModel(p))
+                    .ToListAsync();
+
+            return await query;
         }
     }
 }

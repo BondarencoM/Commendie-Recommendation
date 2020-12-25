@@ -17,17 +17,14 @@ namespace RecommendationService.Test.IntergrationTests
     {
         readonly WikiPersonaScrappingService Service;
         readonly WikiSite WikiSite;
-        readonly ITestOutputHelper Output;
 
 
         string DavidBowieId => "Q5383";
         string LaikaDogId => "Q53662";
         string GeorgakisId => "Q87987698";
 
-        public WikiPersonaScrappingIntegrationTest(ITestOutputHelper output)
+        public WikiPersonaScrappingIntegrationTest()
         {
-            Output = output;
-
             var wikiClient = new WikiClient { ClientUserAgent = "WCLQuickStart/1.0 bondarencom" };
             WikiSite = new WikiSite(wikiClient, "https://www.wikidata.org/w/api.php");
             Service = new WikiPersonaScrappingService(WikiSite);

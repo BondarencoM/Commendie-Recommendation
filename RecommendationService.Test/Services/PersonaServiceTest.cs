@@ -21,17 +21,14 @@ namespace RecommendationService.Test
     {
         private readonly PersonasService Service;
         private readonly DatabaseContext db;
-        private readonly ITestOutputHelper Output;
 
         private readonly Mock<IPersonaScrappingService> mockScrapping;
         private readonly Mock<IPrincipal> mockPrincipal;
 
         private readonly string TestingUser = "TestingUser";
 
-        public PersonaServiceTest(ITestOutputHelper output)
+        public PersonaServiceTest()
         {
-            Output = output;
-
             db = ContextBuilder.GetUniqueInMemory().Result;
 
             mockScrapping = new Mock<IPersonaScrappingService>();

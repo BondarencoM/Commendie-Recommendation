@@ -102,6 +102,8 @@ namespace RecommendationService
             {
                 endpoints.MapControllers();
             });
+
         }
+
     }
 }

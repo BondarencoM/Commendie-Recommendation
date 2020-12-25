@@ -49,7 +49,7 @@ namespace RecommendationService.Controllers
         /// </summary>
         /// <param name="search">Query parameter for the number of personas to return</param>
         /// <returns></returns>
-        [HttpGet("discover/{search}")]
+        [HttpGet("search/{search}")]
         public async Task<ActionResult<IEnumerable<PersonaWithInterestsViewModel>>> GetPersonasSearch(string search)
         {
             return await _personas.GetPersonasSearch(search);

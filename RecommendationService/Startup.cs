@@ -21,6 +21,7 @@ using WikiClientLibrary.Client;
 using WikiClientLibrary.Sites;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Http;
+using RecommendationService.Configs;
 
 namespace RecommendationService
 {
@@ -103,6 +104,7 @@ namespace RecommendationService
             {
                 endpoints.MapControllers();
             });
+            app.MigrateDatabase();
 
         }
 

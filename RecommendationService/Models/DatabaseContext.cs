@@ -12,7 +12,6 @@ namespace RecommendationService.Models
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
         }
 
         public DbSet<Interest> Interests { get; set; }

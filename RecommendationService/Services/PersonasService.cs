@@ -58,7 +58,7 @@ namespace RecommendationService.Services
             var personas = await db.Personas.AsQueryable()
             .Include(p => p.Recommendations)
                 .ThenInclude(r => r.Interest)
-            .OrderByDescending(p => p.Recommendations.LastOrDefault().CreatedAt)
+            .OrderByDescending(p => p.Id)
             .Take(limit)
             .Select(p => new PersonaWithInterestsViewModel(p))
             .ToListAsync();

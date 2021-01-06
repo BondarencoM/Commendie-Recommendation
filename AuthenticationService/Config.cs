@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityModel;
 using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -28,7 +29,14 @@ namespace AuthenticationService
         public static IEnumerable<ApiResource> ApiResources =>
             new ApiResource[]
             {
-                new ApiResource("recommendation-service", "Recomendation service??"){ Scopes={ "recommendation-service" } }
+                new ApiResource("recommendation-service", "Recomendation service??"){
+                    Scopes={ "recommendation-service" },
+                    UserClaims =
+                    {
+                        JwtClaimTypes.Subject,
+                        JwtClaimTypes.Name,
+                    }
+                }
             };
 
 

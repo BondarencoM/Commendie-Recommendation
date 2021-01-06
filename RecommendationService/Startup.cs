@@ -36,7 +36,7 @@ namespace RecommendationService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DatabaseContext>(options => options.UseInMemoryDatabase("recommendation-db"));
+            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
 
             services.AddAuthentication("Bearer")
@@ -51,6 +51,7 @@ namespace RecommendationService
                     ValidAudience = "recommendation-service",
                     // HUGE PROBLEM?
                     ValidateIssuer = false,
+                    NameClaimType = "name",
                 };
             });
 

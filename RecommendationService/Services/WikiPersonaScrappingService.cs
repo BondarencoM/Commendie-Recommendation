@@ -34,10 +34,9 @@ namespace RecommendationService.Services
             {
                 await entity.RefreshAsync(EntityQueryOptions.FetchAllProperties);
             }
-            catch(OperationFailedException e)
+            catch(OperationFailedException e) when (e.Message.Contains("no-such-entity", StringComparison.OrdinalIgnoreCase))
             {
-                if (e.Message.Contains("no-such-entity", StringComparison.OrdinalIgnoreCase))
-                    throw new EntityNotFoundException(e.Message);
+                 throw new EntityNotFoundException(e.Message);
             }
 
             if (entity.IsHuman() == false) 

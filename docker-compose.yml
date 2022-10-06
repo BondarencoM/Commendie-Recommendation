@@ -18,3 +18,9 @@ services:
     build:
       context: .
       dockerfile: RecommendationService/Dockerfile
+
+  commentservice:
+    image: ${DOCKER_REGISTRY-}commentservice
+    build:
+      context: .
+      dockerfile: CommentService/Dockerfile

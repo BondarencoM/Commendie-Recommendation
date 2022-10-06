@@ -45,7 +45,7 @@ namespace RecommendationService.Controllers
         }
 
         /// <summary>
-        /// Returns a list of the registered personas that match teh search parameter
+        /// Returns a list of the registered personas that match the search parameter
         /// </summary>
         /// <param name="search">Query parameter for the number of personas to return</param>
         /// <returns></returns>

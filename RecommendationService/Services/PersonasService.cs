@@ -105,7 +105,7 @@ namespace RecommendationService.Services
 
         private async Task<List<PersonaWithInterestsViewModel>> GetPersonasByNameSearch(string search)
         {
-            var terms = search.ToUpperInvariant().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
+            var terms = search.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
 
             // Pad the list with dummy strings to make sure we don't go out of the range
             // We will only look into teh first 5 words in the search
@@ -115,11 +115,11 @@ namespace RecommendationService.Services
             var query = db.Personas
                     .AsQueryable()
                     .Where( p =>
-                        p.Name.ToUpperInvariant().Contains(terms[0]) ||
-                        p.Name.ToUpperInvariant().Contains(terms[1]) ||
-                        p.Name.ToUpperInvariant().Contains(terms[2]) ||
-                        p.Name.ToUpperInvariant().Contains(terms[3]) ||
-                        p.Name.ToUpperInvariant().Contains(terms[4]) 
+                        p.Name.ToLower().Contains(terms[0]) |
+                        p.Name.ToLower().Contains(terms[1]) ||
+                        p.Name.ToLower().Contains(terms[2]) ||
+                        p.Name.ToLower().Contains(terms[3]) ||
+                        p.Name.ToLower().Contains(terms[4]) 
                     )
                     .Take(40)
                     .Include(p => p.Recommendations)

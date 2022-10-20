@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RecommendationService.Services.Interfaces
 {
-    public interface IRecommendationService : IRepository<Recommendation, CreateRecommedationInputModel, CreateRecommedationInputModel>
+    public interface IRecommendationService : IRepository<Recommendation, CreateRecommedationInputModel, UpdateRecommendationInputModel>
     {
     }
 }

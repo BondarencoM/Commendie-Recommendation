@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecommendationService.Models;
+using RecommendationService.Models.Comments;
 using RecommendationService.Models.Exceptions;
 using RecommendationService.Models.Recommendations;
 using RecommendationService.Services.Interfaces;
@@ -18,10 +19,12 @@ namespace RecommendationService.Controllers
     public class RecommendationsController : ControllerBase
     {
         private readonly IRecommendationService _service;
+        private readonly ICommentService commentService;
 
-        public RecommendationsController(IRecommendationService service)
+        public RecommendationsController(IRecommendationService service, ICommentService commentService)
         {
             _service = service;
+            this.commentService = commentService;
         }
 
         // GET: api/Recommendations
@@ -115,6 +118,13 @@ namespace RecommendationService.Controllers
             //await _context.SaveChangesAsync();
 
             //return recommendation;
+        }
+
+        // GET: api/Recommendations/5/Comments
+        [HttpGet("{id}/comments")]
+        public async Task<ActionResult<Comment>> GetComments(long id, int limit = 20, int skip =0)
+        {
+            return Ok(await this.commentService.GetCommentsForRecommendation(id, limit, skip));
         }
     }
 }

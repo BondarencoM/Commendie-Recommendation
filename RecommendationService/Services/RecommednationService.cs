@@ -22,11 +22,11 @@ namespace RecommendationService.Services
 
         private readonly IPrincipal _principal;
 
-        private string PrincipalUsername => _principal.Identity.Name;
+        private string PrincipalUsername => _principal?.Identity?.Name;
 
         public RecommednationService(
             DatabaseContext db,
-            IPrincipal principal)
+            IPrincipal principal = null)
         {
             this.db = db;
             _principal = principal;
@@ -43,6 +43,8 @@ namespace RecommendationService.Services
             {
                 throw new EntityAlreadyExistsException<Recommendation>(alreadyExists);
             }
+
+            if (this.PrincipalUsername is null) throw new Exception("401 or something");
 
             var recommendation = new Recommendation()
             {
@@ -74,9 +76,14 @@ namespace RecommendationService.Services
                                 .SingleOrDefaultAsync();
         }
 
-        public Task Update(long id, CreateRecommedationInputModel persona)
+        public async Task Update(long id, UpdateRecommendationInputModel update)
         {
-            throw new NotImplementedException();
+
+            var commend = await db.Recommendations.FindAsync(id);
+
+            if(update.Context != null) commend.Context = update.Context;
+
+            await db.SaveChangesAsync();
         }
     }
 }

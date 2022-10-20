@@ -1,10 +1,7 @@
 ﻿using RecommendationService.Models.Interests;
 using RecommendationService.Models.Personas;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RecommendationService.Models.Recommendations
 {

@@ -22,6 +22,7 @@ using WikiClientLibrary.Sites;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Http;
 using RecommendationService.Configs;
+using RecommendationService.Extensions;
 
 namespace RecommendationService
 {
@@ -69,7 +70,7 @@ namespace RecommendationService
             });
 
             services.AddHttpContextAccessor();
-            services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
+            services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User);
 
             services.AddScoped( 
                 sv => new WikiClient{ ClientUserAgent = "WCLQuickStart/1.0 bondarencom" }
@@ -85,6 +86,7 @@ namespace RecommendationService
             services.AddScoped<IInterestService, InterestService>();
             services.AddScoped<IRecommendationService, RecommednationService>();
 
+            services.AddTransient<ICommentService, CommentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,6 +95,7 @@ namespace RecommendationService
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                IdentityModelEventSource.ShowPII = true;
             }
             app.UseCors("default");
             app.UseHttpsRedirection();
@@ -101,6 +104,8 @@ namespace RecommendationService
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseRabbitMQ();
 
             app.UseEndpoints(endpoints =>
             {

@@ -24,6 +24,8 @@ namespace AuthenticationService
             {
                 new ApiScope("recommendation-service", "Personas, Interests and Recommendations"),
                 new ApiScope("user-profile-service", "User Profile Information"),
+                new ApiScope("comment-service", "Leave and Read Comments"),
+
             };
 
         public static IEnumerable<ApiResource> ApiResources =>
@@ -36,7 +38,15 @@ namespace AuthenticationService
                         JwtClaimTypes.Subject,
                         JwtClaimTypes.Name,
                     }
-                }
+                },
+                 new ApiResource("comment-service", "Comment service??"){
+                    Scopes={ "comment-service" },
+                    UserClaims =
+                    {
+                        JwtClaimTypes.Subject,
+                        JwtClaimTypes.Name,
+                    }
+                },
             };
 
 
@@ -60,7 +70,7 @@ namespace AuthenticationService
 
                     AllowOfflineAccess = true,
                     AllowAccessTokensViaBrowser = true,
-                    AllowedScopes = { "openid", "profile", "recommendation-service", "user-profile-service" }
+                    AllowedScopes = { "openid", "profile", "recommendation-service", "user-profile-service", "comment-service" }
                 },
             };
     }

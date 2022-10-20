@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RecommendationService.Models.Comments;
 using RecommendationService.Models.Interests;
 using RecommendationService.Models.Personas;
 using RecommendationService.Models.Recommendations;
@@ -17,6 +18,7 @@ namespace RecommendationService.Models
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Persona> Personas { get; set; }
         public DbSet<Recommendation> Recommendations { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
     }
 }

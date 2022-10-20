@@ -21,7 +21,6 @@ namespace CommentService.Controllers
         public async Task<ActionResult<Comment>> AddComment(CreateCommentInputModel input)
         {
             Comment fromDb = await this.commentService.Create(input);
-
             // TODO: replace with 201 Created
             return this.Ok(fromDb);
         }

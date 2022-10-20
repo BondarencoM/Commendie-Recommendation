@@ -17,7 +17,7 @@ namespace CommentService.Models
 
         public string Text { get; set; } = string.Empty;
 
-        public string Username { get; set; } = string.Empty;
+        public string? Username { get; set; }
 
         public string Domain { get; set; } = string.Empty;
 

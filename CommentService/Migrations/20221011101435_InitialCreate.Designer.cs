@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CommentService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20221004195431_InitialCreate")]
+    [Migration("20221011101435_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,7 +41,6 @@ namespace CommentService.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Username")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

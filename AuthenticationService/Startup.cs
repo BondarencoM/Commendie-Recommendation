@@ -44,7 +44,14 @@ namespace AuthenticationService
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(@"Data Source=AspIdUsers.db"));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>( options =>
+            {
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
+                options.Lockout.MaxFailedAccessAttempts = 20;
+
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 

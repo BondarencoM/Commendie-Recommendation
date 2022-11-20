@@ -33,7 +33,7 @@ namespace RecommendationService.Models.Comments
 
         public string Username { get; set; } = string.Empty;
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         public long? RecommendationId { get; set; }
 

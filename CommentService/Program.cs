@@ -1,11 +1,9 @@
+
 using CommentService.Extensions;
 using CommentService.Models;
-using CommentService.Services;
 using CommentService.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Principal;
@@ -25,20 +23,24 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidIssuer = builder.Configuration["Services:ExternalAuthenticationService"],
+            NameClaimType = "name",
         };
        
     });
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddRateLimiting();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins("http://localhost:4200");
-                          policy.AllowAnyHeader();
-                      });
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200");
+            policy.AllowAnyHeader();
+            policy.AllowAnyMethod();
+        });
 });
 
 
@@ -65,9 +67,11 @@ if (app.Environment.IsDevelopment())
     IdentityModelEventSource.ShowPII = true;
 }
 
-app.UseHttpsRedirection();
-
 app.UseCors(MyAllowSpecificOrigins);
+
+app.UseRateLimiter();
+
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

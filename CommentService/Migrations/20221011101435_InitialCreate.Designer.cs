@@ -8,46 +8,45 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CommentService.Migrations
+namespace CommentService.Migrations;
+
+[DbContext(typeof(DatabaseContext))]
+[Migration("20221011101435_InitialCreate")]
+partial class InitialCreate
 {
-    [DbContext(typeof(DatabaseContext))]
-    [Migration("20221011101435_InitialCreate")]
-    partial class InitialCreate
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
-        {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
+        modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
 
-            modelBuilder.Entity("CommentService.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+        modelBuilder.Entity("CommentService.Models.Comment", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Domain")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Domain")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("EntityId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("EntityId")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Text")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Username")
-                        .HasColumnType("TEXT");
+                b.Property<string>("Username")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Comments");
-                });
+                b.ToTable("Comments");
+            });
 #pragma warning restore 612, 618
-        }
     }
 }

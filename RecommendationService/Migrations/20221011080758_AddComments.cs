@@ -11,10 +11,10 @@ namespace RecommendationService.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<long>(nullable: false),
                     Text = table.Column<string>(nullable: true),
                     Username = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: true),
                     RecommendationId = table.Column<long>(nullable: true),
                     InterestId = table.Column<long>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false)
@@ -27,13 +27,13 @@ namespace RecommendationService.Migrations
                         column: x => x.InterestId,
                         principalTable: "Interests",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Comments_Recommendations_RecommendationId",
                         column: x => x.RecommendationId,
                         principalTable: "Recommendations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

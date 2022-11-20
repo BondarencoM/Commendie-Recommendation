@@ -1,37 +1,75 @@
-﻿using CommentService.Models;
+﻿using CommentService.Exceptions;
+using CommentService.Extensions;
+using CommentService.Models;
 using CommentService.Services.Interfaces;
 using System.Security.Principal;
 
-namespace CommentService.Services
+namespace CommentService.Services;
+
+public class CommentService : ICommentService
 {
-    public class CommentService : ICommentService
+    private readonly DatabaseContext db;
+    private readonly ICommentPublisher publisher;
+    private readonly IPrincipal principal;
+    private readonly ILogger<CommentService> logger;
+
+    public CommentService(
+        DatabaseContext db,
+        ICommentPublisher publisher,
+        IPrincipal principal,
+        ILogger<CommentService> logger)
     {
-        private readonly DatabaseContext db;
-        private readonly ICommentPublisher publisher;
-        private readonly IPrincipal? principal;
+        this.db = db;
+        this.publisher = publisher;
+        this.principal = principal;
+        this.logger = logger;
+    }
 
-        public CommentService(DatabaseContext db, ICommentPublisher publisher, IPrincipal? principal)
+    private string? Username => this.principal?.Identity?.Name;
+
+
+    public async Task<Comment> Create(CreateCommentInputModel input)
+    {
+        var comment = new Comment(input)
         {
-            this.db = db;
-            this.publisher = publisher;
-            this.principal = principal;
+            Username = this.principal?.Identity?.Name,
+            CreatedAt = DateTime.Now,
+        };
+
+        var fromDb = db.Comments.Add(comment);
+        await db.SaveChangesAsync();
+
+        var commentFromDb = fromDb.Entity;
+        await publisher.Created(comment);
+
+        return commentFromDb;
+    }
+
+    public async Task Delete(int id)
+    {
+        var fromDb = await db.Comments.FindAsync(id);
+        var commentId = new DeleteCommentMessage { 
+            Id = id,
+            Domain = fromDb?.Domain,
+        };
+
+        if (fromDb is null)
+        {
+            // Publish deleition anyway in case a client
+            // was offline last time we deleted it
+            await publisher.Deleted(commentId);
+            throw new CommentNotFoundException();
         }
 
-        public async Task<Comment> Create(CreateCommentInputModel input)
-        {
-            var comment = new Comment(input)
-            {
-                Username = this.principal?.Identity?.Name,
-                CreatedAt = DateTime.Now,
-            };
+        if (!CanDelete()) throw new OperationNotPermittedException(this.principal, "delete", $"comment id={commentId.Id}");
+        
 
-            var fromDb = db.Comments.Add(comment);
-            await db.SaveChangesAsync();
+        db.Remove(fromDb);
 
-            var commentFromDb = fromDb.Entity;
-            await publisher.Publish(comment);
+        await db.SaveChangesAsync();
+        await publisher.Deleted(commentId);
 
-            return commentFromDb;
-        }
+        bool CanDelete() => this.principal.IsAdmin() || CommentBelongsToUser();
+        bool CommentBelongsToUser() => fromDb.Username is not null && fromDb.Username == this.Username;
     }
 }

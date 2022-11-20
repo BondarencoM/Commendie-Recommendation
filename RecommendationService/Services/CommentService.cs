@@ -29,15 +29,13 @@ namespace RecommendationService.Services
         public Task HandleAsyncEvent(object sender, BasicDeliverEventArgs args)
         {
             var message = Encoding.UTF8.GetString(args.Body.ToArray());
-            switch (args.RoutingKey)
+            return args.RoutingKey switch
             {
-                case "comments.recommendation.new":
-                    return AddComment();
-                default:
-                    this.logger.LogError($"Could not handle Comment message" +
-                        $" with routing key {args.RoutingKey} and body {message}");
-                    return Task.CompletedTask;
-            }
+                "comments.recommendation.new" => AddComment(),
+                "comments.recommendation.delete" => DeleteComment(),
+                "comments.delete" => DeleteComment(),
+                _ => Default(),
+            };
 
             async Task AddComment()
             {
@@ -46,6 +44,31 @@ namespace RecommendationService.Services
                 this.db.Comments.Add(comment);
 
                 await this.db.SaveChangesAsync();
+            }
+
+            async Task DeleteComment()
+            {
+                var deleted = JsonSerializer.Deserialize<CreateCommentInputModel>(message);
+
+                var comment = new Comment()
+                {
+                    Id = deleted.Id,
+                    Text = "[removed]",
+                    Username = "[removed]",
+                    CreatedAt = null,
+                    IsDeleted = true,
+                };
+
+                db.Attach(comment).State = EntityState.Modified;
+
+                await this.db.SaveChangesAsync();
+            }
+
+            Task Default()
+            {
+                this.logger.LogWarning("Could not handle Comment message" +
+                                        $" with routing key {args.RoutingKey} and body {message}");
+                return Task.CompletedTask;
             }
         }
 

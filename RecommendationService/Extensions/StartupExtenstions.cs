@@ -28,7 +28,9 @@ namespace RecommendationService.Extensions
             channel.QueueBind(queue: queueName,
                                  exchange: "comments",
                                  routingKey: "comments.recommendation.#");
-
+            channel.QueueBind(queue: queueName,
+                                 exchange: "comments",
+                                 routingKey: "comments.delete");
 
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += async (s, e) =>

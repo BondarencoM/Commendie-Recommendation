@@ -18,11 +18,11 @@ namespace RecommendationService.Migrations
 
             modelBuilder.Entity("RecommendationService.Models.Comments.Comment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<long?>("InterestId")

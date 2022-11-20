@@ -95,6 +95,7 @@ namespace AuthenticationService.Areas.Identity.Pages.Account
                 }
                 else
                 {
+                    _logger.LogInformation($"User log in failure from IP: {Request.HttpContext.Connection.RemoteIpAddress}");
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }

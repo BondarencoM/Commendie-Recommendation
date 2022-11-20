@@ -1,9 +1,10 @@
 ﻿using CommentService.Models;
 
-namespace CommentService.Services.Interfaces
+namespace CommentService.Services.Interfaces;
+
+public interface ICommentPublisher
 {
-    public interface ICommentPublisher
-    {
-        public Task Publish(Comment input);
-    }
+    public Task Created(Comment input);
+
+    public Task Deleted(DeleteCommentMessage input);
 }

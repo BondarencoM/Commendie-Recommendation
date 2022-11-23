@@ -50,4 +50,25 @@ public class CommentsController : ControllerBase
 
         return this.NoContent();
     }
+
+    [HttpPut("{id}")]
+    [Authorize]
+    public async Task<ActionResult<Comment>> Edit(EditCommentInputModel newComment)
+    {
+        try
+        {
+            await this.commentService.Edit(newComment);
+        }
+        catch (CommentNotFoundException)
+        {
+            return this.NotFound();
+        }
+        catch (OperationNotPermittedException e)
+        {
+            this._logger.LogWarning(e, "");
+            return this.Forbid();
+        }
+
+        return this.NoContent();
+    }
 }

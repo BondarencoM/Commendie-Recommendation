@@ -3,13 +3,10 @@ using RecommendationService.Models.Exceptions;
 using RecommendationService.Models.Personas;
 using RecommendationService.Services;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using WikiClientLibrary.Client;
 using WikiClientLibrary.Sites;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace RecommendationService.Test.IntergrationTests
 {

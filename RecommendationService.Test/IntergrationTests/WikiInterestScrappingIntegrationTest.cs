@@ -1,11 +1,7 @@
 ﻿using FluentAssertions;
 using RecommendationService.Models.Exceptions;
 using RecommendationService.Models.Interests;
-using RecommendationService.Models.Personas;
 using RecommendationService.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using WikiClientLibrary.Client;
 using WikiClientLibrary.Sites;

@@ -1,9 +1,9 @@
 ﻿using CommentService.Models;
+using CommentService.Models.Messages;
 using CommentService.Services.Interfaces;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace CommentService.Services;
 
@@ -42,6 +42,16 @@ public class RabbitmqCommentPublisher : ICommentPublisher, IDisposable
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(input));
         channel.BasicPublish(exchange: "comments",
                              routingKey: $"comments{domain}.delete",
+                             basicProperties: null,
+                             body: body);
+        return Task.CompletedTask;
+    }
+
+    public Task Edited(EditCommentMessage newComment)
+    {
+        var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(newComment));
+        channel.BasicPublish(exchange: "comments",
+                             routingKey: $"comments.{newComment.Domain}.edit",
                              basicProperties: null,
                              body: body);
         return Task.CompletedTask;

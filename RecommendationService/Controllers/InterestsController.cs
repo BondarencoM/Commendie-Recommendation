@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RecommendationService.Models;
 using RecommendationService.Models.Exceptions;
 using RecommendationService.Models.HttpResponseViewModel;
 using RecommendationService.Models.Interests;
-using RecommendationService.Services;
 using RecommendationService.Services.Interfaces;
 
 namespace RecommendationService.Controllers

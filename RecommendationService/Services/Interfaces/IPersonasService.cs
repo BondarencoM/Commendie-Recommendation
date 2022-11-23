@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RecommendationService.Models;
-using RecommendationService.Models.Personas;
-using System;
+﻿using RecommendationService.Models.Personas;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace RecommendationService.Services.Interfaces

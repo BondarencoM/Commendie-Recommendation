@@ -1,4 +1,4 @@
-﻿namespace CommentService.Models;
+﻿namespace CommentService.Models.Messages;
 
 public class DeleteCommentMessage
 {

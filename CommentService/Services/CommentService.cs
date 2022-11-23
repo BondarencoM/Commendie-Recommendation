@@ -1,6 +1,7 @@
 ﻿using CommentService.Exceptions;
 using CommentService.Extensions;
 using CommentService.Models;
+using CommentService.Models.Messages;
 using CommentService.Services.Interfaces;
 using System.Security.Principal;
 
@@ -61,15 +62,31 @@ public class CommentService : ICommentService
             throw new CommentNotFoundException();
         }
 
-        if (!CanDelete()) throw new OperationNotPermittedException(this.principal, "delete", $"comment id={commentId.Id}");
+        if (!CanEdit(fromDb)) 
+            throw new OperationNotPermittedException(this.principal, "delete", $"comment id={commentId.Id}");
         
 
         db.Remove(fromDb);
 
         await db.SaveChangesAsync();
         await publisher.Deleted(commentId);
-
-        bool CanDelete() => this.principal.IsAdmin() || CommentBelongsToUser();
-        bool CommentBelongsToUser() => fromDb.Username is not null && fromDb.Username == this.Username;
     }
+
+    public async Task Edit(EditCommentInputModel newComment)
+    {
+        var fromDb = await db.Comments.FindAsync(newComment.Id);
+
+        if (fromDb is null) throw new CommentNotFoundException();
+
+        if (!CanEdit(fromDb))
+            throw new OperationNotPermittedException(this.principal, "delete", $"comment id={newComment.Id}");
+
+        await publisher.Edited(new EditCommentMessage(
+            newComment.Id,
+            newComment.Text ?? "",
+            fromDb.Domain));
+    }
+
+    private bool CanEdit(Comment comment) => this.principal.IsAdmin() || CommentBelongsToUser(comment);
+    private bool CommentBelongsToUser(Comment comment) => comment.Username is not null && comment.Username == this.Username;
 }

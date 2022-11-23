@@ -1,8 +1,4 @@
-﻿using RecommendationService.Models;
-using RecommendationService.Models.Interests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using RecommendationService.Models.Interests;
 using System.Threading.Tasks;
 
 namespace RecommendationService.Services.Interfaces

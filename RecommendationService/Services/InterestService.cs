@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RecommendationService.Models;
 using RecommendationService.Models.Exceptions;
 using RecommendationService.Models.Interests;
@@ -9,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using WikiClientLibrary.Sites;
 
 namespace RecommendationService.Services
 {

@@ -1,9 +1,7 @@
 ﻿using RecommendationService.Models.Interests;
 using RecommendationService.Models.Recommendations;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 
 namespace RecommendationService.Models.Comments
 {

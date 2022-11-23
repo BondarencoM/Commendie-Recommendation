@@ -2,9 +2,7 @@ using FluentAssertions;
 using Moq;
 using RecommendationService.Models;
 using RecommendationService.Models.Exceptions;
-using RecommendationService.Models.Interests;
 using RecommendationService.Models.Personas;
-using RecommendationService.Models.Recommendations;
 using RecommendationService.Services;
 using RecommendationService.Services.Interfaces;
 using RecommendationService.Test.TestHelpers;
@@ -13,7 +11,6 @@ using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace RecommendationService.Test
 {

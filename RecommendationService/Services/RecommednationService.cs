@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
 using RecommendationService.Models;
 using RecommendationService.Models.Exceptions;
-using RecommendationService.Models.Interests;
-using RecommendationService.Models.Personas;
 using RecommendationService.Models.Recommendations;
 using RecommendationService.Services.Interfaces;
 using System;

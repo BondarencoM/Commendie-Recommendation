@@ -6,4 +6,5 @@ public interface ICommentService
 {
     public Task<Comment> Create(CreateCommentInputModel input);
     public Task Delete(int id);
+    public Task Edit(EditCommentInputModel newComment);
 }

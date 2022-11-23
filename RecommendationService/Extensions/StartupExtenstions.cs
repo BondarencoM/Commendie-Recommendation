@@ -3,8 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RecommendationService.Services.Interfaces;
-using System;
-using System.Text;
 
 namespace RecommendationService.Extensions
 {

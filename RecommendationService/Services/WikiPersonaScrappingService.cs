@@ -1,14 +1,9 @@
 ﻿using RecommendationService.Extensions;
 using RecommendationService.Models.Exceptions;
 using RecommendationService.Models.Personas;
-using RecommendationService.Models.Wikibase;
 using RecommendationService.Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Net.Http;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using WikiClientLibrary;
 using WikiClientLibrary.Sites;

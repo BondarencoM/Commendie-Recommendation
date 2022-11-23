@@ -1,7 +1,5 @@
 ﻿using RecommendationService.Models.Interests;
 using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace RecommendationService.Models.Recommendations
 {

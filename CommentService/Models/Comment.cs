@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CommentService.Models;
 

@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Events;
 using Serilog.Formatting.Elasticsearch;
 using Serilog.Sinks.Http.BatchFormatters;
 using Serilog.Sinks.SystemConsole.Themes;

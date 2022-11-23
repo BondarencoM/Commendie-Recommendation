@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using RabbitMQ.Client.Events;
 using RecommendationService.Models;
 using RecommendationService.Models.Comments;
-using RecommendationService.Models.Recommendations;
 using RecommendationService.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +33,7 @@ namespace RecommendationService.Services
                 "comments.recommendation.new" => AddComment(),
                 "comments.recommendation.delete" => DeleteComment(),
                 "comments.delete" => DeleteComment(),
+                "comments.recommendation.edit" => EditComment(),
                 _ => Default(),
             };
 
@@ -60,6 +60,17 @@ namespace RecommendationService.Services
                 };
 
                 db.Attach(comment).State = EntityState.Modified;
+
+                await this.db.SaveChangesAsync();
+            }
+
+            async Task EditComment()
+            {
+                var edited = JsonSerializer.Deserialize<EditCommentInputModel>(message);
+
+                var fromDb = await db.Comments.FindAsync(edited.Id);
+
+                fromDb.Text = edited.Text;
 
                 await this.db.SaveChangesAsync();
             }

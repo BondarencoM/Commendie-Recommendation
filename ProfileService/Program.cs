@@ -1,36 +1,25 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Serilog;
-using Serilog.Formatting.Elasticsearch;
-using Serilog.Sinks.Http.BatchFormatters;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace ProfileService
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    public static class Program
-    {
-        public static void Main(string[] args)
-        {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.DurableHttpUsingFileSizeRolledBuffers(
-                    requestUri: "http://commendie-elk-vm.westeurope.cloudapp.azure.com:5602/",
-                    batchFormatter: new ArrayBatchFormatter(),
-                    textFormatter: new ElasticsearchJsonFormatter(),
-                    bufferBaseFileName: "Logs-Buffer/Buffer"
-                )
-                .WriteTo.Console()
-                .Enrich.WithProperty("ServiceOfOrigin", "profile-service")
-                .Enrich.FromLogContext()
-                .CreateLogger();
-
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-            .UseSerilog()
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();

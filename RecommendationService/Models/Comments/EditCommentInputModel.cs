@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RecommendationService.Models.Comments
+﻿namespace RecommendationService.Models.Comments
 {
     public class EditCommentInputModel
     {

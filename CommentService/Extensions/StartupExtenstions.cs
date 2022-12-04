@@ -13,7 +13,7 @@ public static class StartupExtenstions
         services.AddScoped<ICommentPublisher, RabbitmqCommentPublisher>();
         var factory = new ConnectionFactory()
         {
-            HostName = "rabbitmq",
+            HostName = "mabbit",
         };
 
         services.AddSingleton<IConnectionFactory>(factory);
@@ -27,7 +27,7 @@ public static class StartupExtenstions
                 using var con = factory.CreateConnection("Comment service set-up");
                 using var channel = con.CreateModel();
 
-                channel.ExchangeDeclare("comments", ExchangeType.Topic);
+                channel.ExchangeDeclare("comments", ExchangeType.Topic, durable: true, autoDelete: false);
             }
             catch (Exception e)
             {

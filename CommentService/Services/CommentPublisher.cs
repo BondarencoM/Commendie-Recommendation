@@ -25,7 +25,7 @@ public class RabbitmqCommentPublisher : ICommentPublisher, IDisposable
         this.channel.Dispose();
     }
 
-    public Task Created(Comment input)
+    public Task Created(CreateCommentMessage input)
     {
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(input));
         channel.BasicPublish(exchange: "comments",

@@ -23,8 +23,8 @@ namespace AuthenticationService
             new ApiScope[]
             {
                 new ApiScope("recommendation-service", "Personas, Interests and Recommendations"),
-                new ApiScope("user-profile-service", "User Profile Information"),
                 new ApiScope("comment-service", "Leave and Read Comments"),
+                new ApiScope("profile-service", "View and edit personal data"),
 
             };
 
@@ -37,6 +37,7 @@ namespace AuthenticationService
                     {
                         JwtClaimTypes.Subject,
                         JwtClaimTypes.Name,
+                        JwtClaimTypes.Role,
                     }
                 },
                  new ApiResource("comment-service", "Comment service??"){
@@ -45,6 +46,16 @@ namespace AuthenticationService
                     {
                         JwtClaimTypes.Subject,
                         JwtClaimTypes.Name,
+                        JwtClaimTypes.Role,
+                    }
+                },
+                 new ApiResource("profile-service", "Profile service??"){
+                    Scopes={ "profile-service" },
+                    UserClaims =
+                    {
+                        JwtClaimTypes.Subject,
+                        JwtClaimTypes.Name,
+                        JwtClaimTypes.Role,
                     }
                 },
             };
@@ -70,7 +81,7 @@ namespace AuthenticationService
 
                     AllowOfflineAccess = true,
                     AllowAccessTokensViaBrowser = true,
-                    AllowedScopes = { "openid", "profile", "recommendation-service", "user-profile-service", "comment-service" }
+                    AllowedScopes = { "openid", "profile", "recommendation-service", "comment-service", "profile-service" }
                 },
             };
     }

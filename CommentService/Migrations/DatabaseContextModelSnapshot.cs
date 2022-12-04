@@ -34,10 +34,6 @@ partial class DatabaseContextModelSnapshot : ModelSnapshot
                     .IsRequired()
                     .HasColumnType("TEXT");
 
-                b.Property<string>("Text")
-                    .IsRequired()
-                    .HasColumnType("TEXT");
-
                 b.Property<string>("Username")
                     .HasColumnType("TEXT");
 

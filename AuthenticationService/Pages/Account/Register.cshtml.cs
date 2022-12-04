@@ -1,4 +1,6 @@
 ﻿using AuthenticationService.Models;
+using AuthenticationService.Models.Messages;
+using AuthenticationService.Services;
 using AuthenticationService.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -24,19 +26,19 @@ namespace AuthenticationService.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly IProfileService _profileService;
+        private readonly IUserPublisher userPublisher;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IProfileService profileService,
+            IUserPublisher profileService,
             IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            _profileService = profileService;
+            userPublisher = profileService;
             _emailSender = emailSender;
         }
 
@@ -88,7 +90,8 @@ namespace AuthenticationService.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    Task notifyTask = _profileService.NotifyOfNewUser(user);
+                    var createdMessage = new UserCreatedMessage() { Username = user.UserName };
+                    Task notifyTask = userPublisher.Created(createdMessage);
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

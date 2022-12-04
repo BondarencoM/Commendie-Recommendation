@@ -37,13 +37,12 @@ public class CommentService : ICommentService
             CreatedAt = DateTime.Now,
         };
 
-        var fromDb = db.Comments.Add(comment);
+        var fromDb = db.Comments.Add(comment).Entity;
         await db.SaveChangesAsync();
 
-        var commentFromDb = fromDb.Entity;
-        await publisher.Created(comment);
+        await publisher.Created(new CreateCommentMessage(fromDb, input.Text ?? ""));
 
-        return commentFromDb;
+        return fromDb;
     }
 
     public async Task Delete(int id)

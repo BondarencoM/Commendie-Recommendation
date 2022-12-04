@@ -4,6 +4,7 @@
 
 using AuthenticationService.Configs;
 using AuthenticationService.Data;
+using AuthenticationService.Extensions;
 using AuthenticationService.Models;
 using AuthenticationService.Services;
 using AuthenticationService.Services.Interfaces;
@@ -18,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using System;
 
 namespace AuthenticationService
@@ -54,6 +56,7 @@ namespace AuthenticationService
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddRabbitMQ();
 
 
             var builder = services.AddIdentityServer(options =>
@@ -107,6 +110,7 @@ namespace AuthenticationService
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                IdentityModelEventSource.ShowPII = true;
             }
 
             app.UseStaticFiles();

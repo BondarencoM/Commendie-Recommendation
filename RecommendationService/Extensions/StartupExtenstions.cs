@@ -12,17 +12,17 @@ namespace RecommendationService.Extensions
         {
             var factory = new ConnectionFactory()
             {
-                HostName = "rabbitmq",
+                HostName = "mabbit",
             };
 
             var con = factory.CreateConnection("Recommendation service set-up");
             var channel = con.CreateModel();
 
-            channel.ExchangeDeclare(exchange: "comments", type: "topic");
+            channel.ExchangeDeclare(exchange: "comments", type: "topic", durable: true, autoDelete: false);
 
             const string queueName = "recommendation-service-comments";
 
-            channel.QueueDeclare(queueName, durable: true);
+            channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false);
             channel.QueueBind(queue: queueName,
                                  exchange: "comments",
                                  routingKey: "comments.recommendation.#");

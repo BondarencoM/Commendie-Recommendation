@@ -52,15 +52,6 @@ jobs:
         platforms: linux/amd64
         push: true
         tags: bondarencom/recommendationservice:latest
-    - name: Deploy Comments
-      if: github.ref == 'refs/heads/master'
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: ./CommentService/Dockerfile
-        platforms: linux/amd64
-        push: true
-        tags: bondarencom/commentservice:latest
     - name: Deploy Profile
       if: github.ref == 'refs/heads/master'
       uses: docker/build-push-action@v2
@@ -70,3 +61,12 @@ jobs:
         platforms: linux/amd64
         push: true
         tags: bondarencom/profileservice:latest
+    - name: Deploy Comments
+      if: github.ref == 'refs/heads/master'
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./CommentService/Dockerfile
+        platforms: linux/amd64
+        push: true
+        tags: bondarencom/commentservice:latest

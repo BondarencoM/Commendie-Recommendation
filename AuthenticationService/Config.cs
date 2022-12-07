@@ -67,7 +67,7 @@ namespace AuthenticationService
                 new Client
                 {
                     ClientId = "angular-app",
-                    ClientName = "Commendie Web application",
+                    ClientName = "WikiRecord Web application",
 
                     RequireClientSecret = false,
 

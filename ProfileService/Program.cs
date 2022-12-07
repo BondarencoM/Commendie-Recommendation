@@ -34,9 +34,17 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins("http://localhost:4200");
-            policy.AllowAnyHeader();
-            policy.AllowAnyMethod();
+            policy.WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+
+            policy.WithOrigins("https://bondarencom.github.io")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+
+            policy.WithOrigins("http://bondarencom.github.io")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
         });
 });
 

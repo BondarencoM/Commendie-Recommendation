@@ -1,5 +1,6 @@
 ﻿using ProfileService.Profiles;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Text.Json.Serialization;
 
@@ -21,6 +22,7 @@ public class Comment
         this.EntityId = newComment.EntityId;
     }
 
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public long Id { get; set; }
 
     public string Text { get; set; } = string.Empty;

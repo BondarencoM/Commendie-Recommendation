@@ -13,6 +13,7 @@ namespace RecommendationService.Extensions
         public static void UseRabbitMQ(this IApplicationBuilder app)
         {
             var config = app.ApplicationServices.GetService<IConfiguration>();
+            Console.WriteLine("##connection " + config.GetConnectionString("RabbitMq") + " over ");
             var factory = new ConnectionFactory()
             {
                 Uri = new Uri(config.GetConnectionString("RabbitMq")),

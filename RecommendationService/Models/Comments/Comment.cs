@@ -1,6 +1,7 @@
 ﻿using RecommendationService.Models.Interests;
 using RecommendationService.Models.Recommendations;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace RecommendationService.Models.Comments
@@ -25,6 +26,7 @@ namespace RecommendationService.Models.Comments
             else throw new InvalidOperationException("Could not create commeent with domain =" + newComment.Domain);
         }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long Id { get; set; }
 
         public string Text { get; set; } = string.Empty;

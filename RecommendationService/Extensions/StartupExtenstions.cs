@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RecommendationService.Services.Interfaces;
+using System;
 
 namespace RecommendationService.Extensions
 {
@@ -10,9 +12,10 @@ namespace RecommendationService.Extensions
     {
         public static void UseRabbitMQ(this IApplicationBuilder app)
         {
+            var config = app.ApplicationServices.GetService<IConfiguration>();
             var factory = new ConnectionFactory()
             {
-                HostName = "mabbit",
+                Uri = new Uri(config.GetConnectionString("RabbitMq")),
             };
 
             var con = factory.CreateConnection("Recommendation service set-up");

@@ -8,12 +8,12 @@ namespace CommentService.Extensions;
 
 public static class StartupExtenstions
 {
-    public static void AddRabbitMQ(this IServiceCollection services)
+    public static void AddRabbitMQ(this IServiceCollection services, IConfiguration config)
     {
         services.AddScoped<ICommentPublisher, RabbitmqCommentPublisher>();
         var factory = new ConnectionFactory()
         {
-            HostName = "mabbit",
+            Uri = new Uri(config.GetConnectionString("RabbitMq")),
         };
 
         services.AddSingleton<IConnectionFactory>(factory);

@@ -15,24 +15,34 @@ using System.Security.Principal;
 using Microsoft.AspNetCore.Http;
 using RecommendationService.Configs;
 using RecommendationService.Extensions;
+using System;
 
 namespace RecommendationService
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
+            Environment = environment;
             Configuration = configuration;
         }
 
+        public IWebHostEnvironment Environment { get; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            if (Environment.IsDevelopment())
+            {
+                services.AddDbContext<DatabaseContext>(options => options.UseSqlite(@"Data Source=recommendations.db"));
+            }
+            else
+            {
+                var conString = Configuration.GetConnectionString("AzureConnection");
+                services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(conString));
+            }
 
-            services.AddDbContext<DatabaseContext>(options => options.UseSqlite(@"Data Source=recommendations.db"));
             services.AddControllers();
 
             services.AddAuthentication("Bearer")

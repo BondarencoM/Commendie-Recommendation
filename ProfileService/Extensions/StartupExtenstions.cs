@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using ProfileService.Comments;
+﻿using ProfileService.Comments;
 using ProfileService.Common;
 using ProfileService.Profiles;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System.Runtime.CompilerServices;
 
 namespace ProfileService.Extensions;
 
@@ -13,9 +10,10 @@ public static class StartupExtenstions
 {
     public static void UseRabbitMQ(this IApplicationBuilder app)
     {
+        var config = app.ApplicationServices.GetService<IConfiguration>();
         var factory = new ConnectionFactory()
         {
-            HostName = "mabbit",
+            Uri = new Uri(config.GetConnectionString("RabbitMq")!),
         };
 
         var con = factory.CreateConnection("Profile service set-up");

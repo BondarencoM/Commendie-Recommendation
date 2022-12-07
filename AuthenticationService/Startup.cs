@@ -40,10 +40,15 @@ namespace AuthenticationService
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            //services.AddDbContext<ApplicationDbContext>(options =>
-                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(@"Data Source=AspIdUsers.db"));
+            if (Environment.IsDevelopment())
+            {
+                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(@"Data Source=AspIdUsers.db"));
+            }
+            else
+            {
+                var conString = Configuration.GetConnectionString("AzureConnection");
+                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(conString));
+            }
 
             services.AddIdentity<ApplicationUser, IdentityRole>( options =>
             {
@@ -56,7 +61,7 @@ namespace AuthenticationService
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddRabbitMQ();
+            services.AddRabbitMQ(Configuration);
 
 
             var builder = services.AddIdentityServer(options =>

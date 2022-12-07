@@ -9,8 +9,8 @@ namespace AuthenticationService.Configs
     {
         public static void MigrateDatabase(this IApplicationBuilder app)
         {
-            using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
-            scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
+            //using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+            //scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
         }
     }
 }

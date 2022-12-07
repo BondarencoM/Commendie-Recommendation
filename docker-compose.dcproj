@@ -5,8 +5,6 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>82047727-e345-43f9-a566-5186f557af9c</ProjectGuid>
     <DockerLaunchAction>None</DockerLaunchAction>
-    <DockerServiceUrl>
-    </DockerServiceUrl>
     <DockerServiceName>authenticationservice</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>

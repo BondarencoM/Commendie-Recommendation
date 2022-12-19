@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using RabbitMQ.Client.Events;
 using RecommendationService.Models;
 using RecommendationService.Models.Comments;
+using RecommendationService.Models.User;
 using RecommendationService.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,29 +51,23 @@ public class CommentService : ICommentService
         {
             var deleted = JsonSerializer.Deserialize<CreateCommentInputModel>(message);
 
-            var comment = new Comment()
-            {
-                Id = deleted.Id,
-                Text = "[removed]",
-                Username = "[removed]",
-                CreatedAt = null,
-                IsDeleted = true,
-            };
-
-            db.Attach(comment).State = EntityState.Modified;
-
-            await this.db.SaveChangesAsync();
+            await db.Comments
+            .Where(c => c.Id == deleted.Id)
+            .ExecuteUpdateAsync(comment =>
+                comment.SetProperty(p => p.Text, "[removed]")
+                       .SetProperty(p => p.Username, "[removed]")
+                       .SetProperty(p => p.IsDeleted, true)
+            );
         }
 
         async Task EditComment()
         {
             var edited = JsonSerializer.Deserialize<EditCommentInputModel>(message);
 
-            var fromDb = await db.Comments.FindAsync(edited.Id);
-
-            fromDb.Text = edited.Text;
-
-            await this.db.SaveChangesAsync();
+            await db.Comments
+            .Where(c => c.Id == edited.Id)
+            .ExecuteUpdateAsync(comment => comment.SetProperty(p => p.Text, edited.Text)
+            );
         }
 
         Task Default()
@@ -85,7 +80,7 @@ public class CommentService : ICommentService
 
     public async Task<List<Comment>> GetCommentsForRecommendation(long id, int limit = 20, int skip = 0)
     {
-        IQueryable<Comment> query = this.db.Comments.AsQueryable()
+        IQueryable<Comment> query = this.db.Comments
             .Where(c => c.RecommendationId == id)
             .OrderByDescending(c => c.CreatedAt);
 
@@ -95,14 +90,12 @@ public class CommentService : ICommentService
         return await query.ToListAsync();
     }
 
-    public async Task CleanseUser(string username)
-    {
-        //await db.Comments
-        //    .Where(c => c.Username == username)
-        //    .ExecuteUpdateAsync(c =>
-        //        c.SetProperty(p => p.Text, "[removed]")
-        //         .SetProperty(p => p.IsDeleted, true)
-        //    );
-
-    }
+    public Task CleanseUser(UserIdentifier user) =>
+        db.Comments
+            .Where(c => c.Username == user.Username)
+            .ExecuteUpdateAsync(comment =>
+                comment.SetProperty(p => p.Text, "[removed]")
+                       .SetProperty(p => p.Username, "[removed]")
+                       .SetProperty(p => p.IsDeleted, true)
+            );
 }

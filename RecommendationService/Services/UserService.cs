@@ -2,6 +2,9 @@
 using RabbitMQ.Client.Events;
 using RecommendationService.Models.User;
 using RecommendationService.Services.Interfaces;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -11,14 +14,14 @@ namespace RecommendationService.Services;
 public class UserService : IUserService
 {
     private ILogger<CommentService> logger;
-    private ICommentService comments;
+    private readonly IEnumerable<IUserCleanseable> servicesWithUsers;
 
     public UserService(
        ILogger<CommentService> logger,
-       ICommentService comments)
+       IEnumerable<IUserCleanseable> servicesWithUsers)
     {
         this.logger = logger;
-        this.comments = comments;
+        this.servicesWithUsers = servicesWithUsers;
     }
 
     public Task HandleAsyncEvent(object sender, BasicDeliverEventArgs args)
@@ -26,17 +29,18 @@ public class UserService : IUserService
         var message = Encoding.UTF8.GetString(args.Body.ToArray());
         return args.RoutingKey switch
         {
-            "users.delete" => DeleteComment(),
+            "users.delete" => CleanseUserFromEverywhere(),
             _ => Default(),
         };
 
-        Task DeleteComment()
+        Task CleanseUserFromEverywhere()
         {
             var deleted = JsonSerializer.Deserialize<UserIdentifier> (message);
 
-            var delComments = comments.CleanseUser(deleted.Username);
+            var tasks = this.servicesWithUsers
+                            .Select(s => s.CleanseUser(deleted));
 
-            return Task.WhenAll(delComments);
+            return Task.WhenAll(tasks);
         }
 
         Task Default()

@@ -86,10 +86,16 @@ public class Startup
         services.AddScoped<IInterestScrappingService, WikiInterestScrappingService>();
 
         services.AddScoped<IPersonasService, PersonasService>();
-        services.AddScoped<IInterestService, InterestService>();
-        services.AddScoped<IRecommendationService, RecommednationService>();
+        services.AddScoped<IUserCleanseable, PersonasService>();
 
-        services.AddTransient<ICommentService, CommentService>();
+        services.AddScoped<IInterestService, InterestService>();
+        services.AddScoped<IUserCleanseable, InterestService>();
+
+        services.AddScoped<IRecommendationService, RecommednationService>();
+        services.AddScoped<IUserCleanseable, RecommednationService>();
+
+        services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<IUserCleanseable, CommentService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -115,7 +121,5 @@ public class Startup
             endpoints.MapControllers();
         });
         app.MigrateDatabase();
-
     }
-
 }

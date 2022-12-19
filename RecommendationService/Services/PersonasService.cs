@@ -2,6 +2,7 @@
 using RecommendationService.Models;
 using RecommendationService.Models.Exceptions;
 using RecommendationService.Models.Personas;
+using RecommendationService.Models.User;
 using RecommendationService.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -128,4 +129,10 @@ public class PersonasService : IPersonasService
 
         return await query;
     }
+
+    public Task CleanseUser(UserIdentifier user) =>
+        db.Personas
+            .Where(c => c.AddedBy == user.Username)
+            .ExecuteUpdateAsync(comment =>
+                comment.SetProperty(p => p.Username, "[removed]"));
 }

@@ -1,11 +1,12 @@
 ﻿using RabbitMQ.Client.Events;
 using RecommendationService.Models.Comments;
+using RecommendationService.Models.User;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RecommendationService.Services.Interfaces;
 
-public interface ICommentService : IUserCleanseable, IRabbitEventHandler
+public interface IUserCleanseable
 {
-    Task<List<Comment>> GetCommentsForRecommendation(long id, int limit, int skip);
+    public Task CleanseUser(UserIdentifier user);
 }

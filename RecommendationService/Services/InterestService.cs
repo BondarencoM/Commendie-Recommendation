@@ -2,6 +2,7 @@
 using RecommendationService.Models;
 using RecommendationService.Models.Exceptions;
 using RecommendationService.Models.Interests;
+using RecommendationService.Models.User;
 using RecommendationService.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -67,4 +68,10 @@ public class InterestService : IInterestService
 
         return interest ?? await Add(input);
     }
+
+    public Task CleanseUser(UserIdentifier user) =>
+        db.Interests
+            .Where(c => c.AddedBy == user.Username)
+            .ExecuteUpdateAsync(comment =>
+                comment.SetProperty(p => p.AddedBy, "[removed]"));
 }

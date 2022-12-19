@@ -2,6 +2,6 @@
 
 namespace RecommendationService.Services.Interfaces;
 
-public interface IRecommendationService : IRepository<Recommendation, CreateRecommedationInputModel, UpdateRecommendationInputModel>
+public interface IRecommendationService : IUserCleanseable, IRepository<Recommendation, CreateRecommedationInputModel, UpdateRecommendationInputModel>
 {
 }

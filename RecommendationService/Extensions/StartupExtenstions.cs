@@ -81,7 +81,6 @@ public static class StartupExtenstions
             {
                 scope.Dispose();
             }
-
         }
     }
 }

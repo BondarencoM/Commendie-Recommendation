@@ -2,6 +2,7 @@
 using RecommendationService.Models;
 using RecommendationService.Models.Exceptions;
 using RecommendationService.Models.Recommendations;
+using RecommendationService.Models.User;
 using RecommendationService.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -81,4 +82,9 @@ public class RecommednationService : IRecommendationService
 
         await db.SaveChangesAsync();
     }
+
+    public Task CleanseUser(UserIdentifier user) =>
+        db.Recommendations
+            .Where(r => r.AddedBy == user.Username)
+            .ExecuteUpdateAsync(comment => comment.SetProperty(p => p.AddedBy, "[removed]"));
 }

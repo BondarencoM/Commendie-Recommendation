@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RecommendationService.Models.Personas
+namespace RecommendationService.Models.Personas;
+
+public class CreatePersonaInputModel
 {
-    public class CreatePersonaInputModel
-    {
-        [Required]
-        public string WikiId { get; set; }
-    }
+    [Required]
+    public string WikiId { get; set; }
 }

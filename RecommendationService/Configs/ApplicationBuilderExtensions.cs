@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RecommendationService.Configs
+namespace RecommendationService.Configs;
+
+public static class ApplicationBuilderExtensions
 {
-    public static class ApplicationBuilderExtensions
+    public static void MigrateDatabase(this IApplicationBuilder app)
     {
-        public static void MigrateDatabase(this IApplicationBuilder app)
-        {
-            using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
-            scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.Migrate();
-        }
+        using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+        scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.Migrate();
     }
 }

@@ -1,9 +1,8 @@
-﻿namespace RecommendationService.Models.Wikibase
-{
-    public static class WikibaseProperty
-    {
-        public static string InstanceOf => "P31";
+﻿namespace RecommendationService.Models.Wikibase;
 
-        public static string Image => "P18";
-    }
+public static class WikibaseProperty
+{
+    public static string InstanceOf => "P31";
+
+    public static string Image => "P18";
 }

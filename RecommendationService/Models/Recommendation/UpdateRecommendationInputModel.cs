@@ -1,8 +1,6 @@
-﻿namespace RecommendationService.Models.Recommendations
+﻿namespace RecommendationService.Models.Recommendations;
+
+public class UpdateRecommendationInputModel
 {
-    public class UpdateRecommendationInputModel
-    {
-        public string Context { get; set; }
-    }
+    public string Context { get; set; }
 }
-    

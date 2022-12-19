@@ -1,7 +1,6 @@
-﻿namespace RecommendationService.Models.Personas
+﻿namespace RecommendationService.Models.Personas;
+
+public class UpdatePersonaInputModel : CreatePersonaInputModel
 {
-    public class UpdatePersonaInputModel : CreatePersonaInputModel
-    {
-        public long Id { get; set; }
-    }
+    public long Id { get; set; }
 }

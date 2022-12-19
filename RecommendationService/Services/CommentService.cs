@@ -10,100 +10,99 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace RecommendationService.Services
-{
-    public class CommentService : ICommentService
-    {
-        private readonly ILogger<CommentService> logger;
-        private readonly DatabaseContext db;
+namespace RecommendationService.Services;
 
-        public CommentService(
-            ILogger<CommentService> logger,
-            DatabaseContext db)
+public class CommentService : ICommentService
+{
+    private readonly ILogger<CommentService> logger;
+    private readonly DatabaseContext db;
+
+    public CommentService(
+        ILogger<CommentService> logger,
+        DatabaseContext db)
+    {
+        this.logger = logger;
+        this.db = db;
+    }
+
+    public Task HandleAsyncEvent(object sender, BasicDeliverEventArgs args)
+    {
+        var message = Encoding.UTF8.GetString(args.Body.ToArray());
+        return args.RoutingKey switch
         {
-            this.logger = logger;
-            this.db = db;
+            "comments.recommendation.new" => AddComment(),
+            "comments.recommendation.delete" => DeleteComment(),
+            "comments.delete" => DeleteComment(),
+            "comments.recommendation.edit" => EditComment(),
+            _ => Default(),
+        };
+
+        async Task AddComment()
+        {
+            var newComment = JsonSerializer.Deserialize<CreateCommentInputModel>(message);
+            var comment = new Comment(newComment);
+            this.db.Comments.Add(comment);
+
+            await this.db.SaveChangesAsync();
         }
 
-        public Task HandleAsyncEvent(object sender, BasicDeliverEventArgs args)
+        async Task DeleteComment()
         {
-            var message = Encoding.UTF8.GetString(args.Body.ToArray());
-            return args.RoutingKey switch
+            var deleted = JsonSerializer.Deserialize<CreateCommentInputModel>(message);
+
+            var comment = new Comment()
             {
-                "comments.recommendation.new" => AddComment(),
-                "comments.recommendation.delete" => DeleteComment(),
-                "comments.delete" => DeleteComment(),
-                "comments.recommendation.edit" => EditComment(),
-                _ => Default(),
+                Id = deleted.Id,
+                Text = "[removed]",
+                Username = "[removed]",
+                CreatedAt = null,
+                IsDeleted = true,
             };
 
-            async Task AddComment()
-            {
-                var newComment = JsonSerializer.Deserialize<CreateCommentInputModel>(message);
-                var comment = new Comment(newComment);
-                this.db.Comments.Add(comment);
+            db.Attach(comment).State = EntityState.Modified;
 
-                await this.db.SaveChangesAsync();
-            }
-
-            async Task DeleteComment()
-            {
-                var deleted = JsonSerializer.Deserialize<CreateCommentInputModel>(message);
-
-                var comment = new Comment()
-                {
-                    Id = deleted.Id,
-                    Text = "[removed]",
-                    Username = "[removed]",
-                    CreatedAt = null,
-                    IsDeleted = true,
-                };
-
-                db.Attach(comment).State = EntityState.Modified;
-
-                await this.db.SaveChangesAsync();
-            }
-
-            async Task EditComment()
-            {
-                var edited = JsonSerializer.Deserialize<EditCommentInputModel>(message);
-
-                var fromDb = await db.Comments.FindAsync(edited.Id);
-
-                fromDb.Text = edited.Text;
-
-                await this.db.SaveChangesAsync();
-            }
-
-            Task Default()
-            {
-                this.logger.LogWarning("Could not handle Comment message" +
-                                        $" with routing key {args.RoutingKey} and body {message}");
-                return Task.CompletedTask;
-            }
+            await this.db.SaveChangesAsync();
         }
 
-        public async Task<List<Comment>> GetCommentsForRecommendation(long id, int limit = 20, int skip = 0)
+        async Task EditComment()
         {
-            IQueryable<Comment> query = this.db.Comments.AsQueryable()
-                .Where(c => c.RecommendationId == id)
-                .OrderByDescending(c => c.CreatedAt);
+            var edited = JsonSerializer.Deserialize<EditCommentInputModel>(message);
 
-            if (skip > 0) query = query.Skip(skip);
-            if (limit > 0) query = query.Take(limit);
+            var fromDb = await db.Comments.FindAsync(edited.Id);
 
-            return await query.ToListAsync();
+            fromDb.Text = edited.Text;
+
+            await this.db.SaveChangesAsync();
         }
 
-        public async Task CleanseUser(string username)
+        Task Default()
         {
-            //await db.Comments
-            //    .Where(c => c.Username == username)
-            //    .ExecuteUpdateAsync(c =>
-            //        c.SetProperty(p => p.Text, "[removed]")
-            //         .SetProperty(p => p.IsDeleted, true)
-            //    );
-
+            this.logger.LogWarning("Could not handle Comment message" +
+                                    $" with routing key {args.RoutingKey} and body {message}");
+            return Task.CompletedTask;
         }
+    }
+
+    public async Task<List<Comment>> GetCommentsForRecommendation(long id, int limit = 20, int skip = 0)
+    {
+        IQueryable<Comment> query = this.db.Comments.AsQueryable()
+            .Where(c => c.RecommendationId == id)
+            .OrderByDescending(c => c.CreatedAt);
+
+        if (skip > 0) query = query.Skip(skip);
+        if (limit > 0) query = query.Take(limit);
+
+        return await query.ToListAsync();
+    }
+
+    public async Task CleanseUser(string username)
+    {
+        //await db.Comments
+        //    .Where(c => c.Username == username)
+        //    .ExecuteUpdateAsync(c =>
+        //        c.SetProperty(p => p.Text, "[removed]")
+        //         .SetProperty(p => p.IsDeleted, true)
+        //    );
+
     }
 }

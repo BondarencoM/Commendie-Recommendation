@@ -3,9 +3,8 @@ using RecommendationService.Models.Comments;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RecommendationService.Services.Interfaces
+namespace RecommendationService.Services.Interfaces;
+
+public interface IUserService : IRabbitEventHandler
 {
-    public interface IUserService : IRabbitEventHandler
-    {
-    }
 }

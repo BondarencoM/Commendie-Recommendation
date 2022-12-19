@@ -9,77 +9,76 @@ using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
 
-namespace RecommendationService.Services
+namespace RecommendationService.Services;
+
+public class RecommednationService : IRecommendationService
 {
-    public class RecommednationService : IRecommendationService
+
+    private readonly DatabaseContext db;
+
+    private readonly IPrincipal _principal;
+
+    private string PrincipalUsername => _principal?.Identity?.Name;
+
+    public RecommednationService(
+        DatabaseContext db,
+        IPrincipal principal = null)
+    {
+        this.db = db;
+        _principal = principal;
+    }
+
+    public async Task<Recommendation> Add(CreateRecommedationInputModel input)
     {
 
-        private readonly DatabaseContext db;
-
-        private readonly IPrincipal _principal;
-
-        private string PrincipalUsername => _principal?.Identity?.Name;
-
-        public RecommednationService(
-            DatabaseContext db,
-            IPrincipal principal = null)
+        var alreadyExists = await db.Recommendations.AsQueryable()
+                                    .Where(r => r.InterestId == input.InterestId)
+                                    .Where(r => r.PersonaId == input.PersonaId)
+                                    .SingleOrDefaultAsync();
+        if(alreadyExists != null)
         {
-            this.db = db;
-            _principal = principal;
+            throw new EntityAlreadyExistsException<Recommendation>(alreadyExists);
         }
 
-        public async Task<Recommendation> Add(CreateRecommedationInputModel input)
+        if (this.PrincipalUsername is null) throw new Exception("401 or something");
+
+        var recommendation = new Recommendation()
         {
+            InterestId = input.InterestId,
+            PersonaId = input.PersonaId,
+            Context = input.Context,
+            AddedBy = PrincipalUsername,
+            CreatedAt = DateTime.Now,
+        };
 
-            var alreadyExists = await db.Recommendations.AsQueryable()
-                                        .Where(r => r.InterestId == input.InterestId)
-                                        .Where(r => r.PersonaId == input.PersonaId)
-                                        .SingleOrDefaultAsync();
-            if(alreadyExists != null)
-            {
-                throw new EntityAlreadyExistsException<Recommendation>(alreadyExists);
-            }
+        var fromDb = db.Recommendations.Add(recommendation);
 
-            if (this.PrincipalUsername is null) throw new Exception("401 or something");
+        await db.SaveChangesAsync();
 
-            var recommendation = new Recommendation()
-            {
-                InterestId = input.InterestId,
-                PersonaId = input.PersonaId,
-                Context = input.Context,
-                AddedBy = PrincipalUsername,
-                CreatedAt = DateTime.Now,
-            };
+        return fromDb.Entity;
+    }
 
-            var fromDb = db.Recommendations.Add(recommendation);
+    public async Task<List<Recommendation>> All()
+    {
+        return await db.Recommendations.AsQueryable().ToListAsync();
+    }
 
-            await db.SaveChangesAsync();
+    public async Task<Recommendation> Find(long id)
+    {
+        return await db.Recommendations
+                            .Include(r => r.Interest)
+                            .Include(r => r.Persona)
+                            .Where(r => r.Id == id)
+                            .SingleOrDefaultAsync();
+    }
 
-            return fromDb.Entity;
-        }
+    public async Task Update(long id, UpdateRecommendationInputModel update)
+    {
 
-        public async Task<List<Recommendation>> All()
-        {
-            return await db.Recommendations.AsQueryable().ToListAsync();
-        }
+        var commend = await db.Recommendations.FindAsync(id);
 
-        public async Task<Recommendation> Find(long id)
-        {
-            return await db.Recommendations
-                                .Include(r => r.Interest)
-                                .Include(r => r.Persona)
-                                .Where(r => r.Id == id)
-                                .SingleOrDefaultAsync();
-        }
+        if(update.Context != null) commend.Context = update.Context;
 
-        public async Task Update(long id, UpdateRecommendationInputModel update)
-        {
-
-            var commend = await db.Recommendations.FindAsync(id);
-
-            if(update.Context != null) commend.Context = update.Context;
-
-            await db.SaveChangesAsync();
-        }
+        await db.SaveChangesAsync();
     }
 }

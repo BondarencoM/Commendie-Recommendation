@@ -1,10 +1,9 @@
 ﻿using RabbitMQ.Client.Events;
 using System.Threading.Tasks;
 
-namespace RecommendationService.Services.Interfaces
+namespace RecommendationService.Services.Interfaces;
+
+public interface IRabbitEventHandler
 {
-    public interface IRabbitEventHandler
-    {
-        Task HandleAsyncEvent(object sender, BasicDeliverEventArgs args);
-    }
+    Task HandleAsyncEvent(object sender, BasicDeliverEventArgs args);
 }

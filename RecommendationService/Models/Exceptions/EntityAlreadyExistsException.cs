@@ -1,15 +1,14 @@
 ﻿using System;
 
-namespace RecommendationService.Models.Exceptions
+namespace RecommendationService.Models.Exceptions;
+
+public class EntityAlreadyExistsException<T> : Exception
 {
-    public class EntityAlreadyExistsException<T> : Exception
+    public T Entity { get; set; }
+
+    public EntityAlreadyExistsException(T entity)
     {
-        public T Entity { get; set; }
-
-        public EntityAlreadyExistsException(T entity)
-        {
-            Entity = entity;
-        }
-
+        Entity = entity;
     }
+
 }

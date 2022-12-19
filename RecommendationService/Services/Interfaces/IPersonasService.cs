@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RecommendationService.Services.Interfaces
-{
-    public interface IPersonasService: IRepository<Persona, CreatePersonaInputModel, UpdatePersonaInputModel>
-    {
-        public Task<List<PersonaWithInterestsViewModel>> GetSuggestedForDiscovery(ushort limit);
+namespace RecommendationService.Services.Interfaces;
 
-        Task<PersonaWithInterestsViewModel> GetPersonaWithRecommendations(long id);
-        Task<List<PersonaWithInterestsViewModel>> GetPersonasSearch(string search);
-    }
+public interface IPersonasService: IRepository<Persona, CreatePersonaInputModel, UpdatePersonaInputModel>
+{
+    public Task<List<PersonaWithInterestsViewModel>> GetSuggestedForDiscovery(ushort limit);
+
+    Task<PersonaWithInterestsViewModel> GetPersonaWithRecommendations(long id);
+    Task<List<PersonaWithInterestsViewModel>> GetPersonasSearch(string search);
 }

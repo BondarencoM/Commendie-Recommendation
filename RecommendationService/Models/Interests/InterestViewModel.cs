@@ -1,7 +1,6 @@
-﻿namespace RecommendationService.Models.Interests
+﻿namespace RecommendationService.Models.Interests;
+
+public class InterestViewModel
 {
-    public class InterestViewModel
-    {
-        public long Id { get; set; }
-    }
+    public long Id { get; set; }
 }

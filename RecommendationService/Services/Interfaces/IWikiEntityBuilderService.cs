@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using WikiClientLibrary.Wikibase;
 
-namespace RecommendationService.Services.Interfaces
+namespace RecommendationService.Services.Interfaces;
+
+public interface IWikiEntityBuilderService
 {
-    public interface IWikiEntityBuilderService
-    {
-        public Task<Entity> GetEntity(string wikiId, EntityQueryOptions options = EntityQueryOptions.FetchAllProperties);
-    }
+    public Task<Entity> GetEntity(string wikiId, EntityQueryOptions options = EntityQueryOptions.FetchAllProperties);
 }

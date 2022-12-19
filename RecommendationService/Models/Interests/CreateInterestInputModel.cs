@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RecommendationService.Models.Interests
+namespace RecommendationService.Models.Interests;
+
+public class CreateInterestInputModel
 {
-    public class CreateInterestInputModel
-    {
-        [Required]
-        public string WikiId { get; set; }
-    }
+    [Required]
+    public string WikiId { get; set; }
 }

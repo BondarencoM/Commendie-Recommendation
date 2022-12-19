@@ -1,10 +1,9 @@
 ﻿using RecommendationService.Models.Interests;
 using System.Threading.Tasks;
 
-namespace RecommendationService.Services.Interfaces
+namespace RecommendationService.Services.Interfaces;
+
+public interface IInterestScrappingService
 {
-    public interface IInterestScrappingService
-    {
-        Task<Interest> ScrapeInterestDetails(string identifier);
-    }
+    Task<Interest> ScrapeInterestDetails(string identifier);
 }

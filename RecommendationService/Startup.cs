@@ -17,106 +17,105 @@ using RecommendationService.Configs;
 using RecommendationService.Extensions;
 using System;
 
-namespace RecommendationService
+namespace RecommendationService;
+
+public class Startup
 {
-    public class Startup
+    public Startup(IWebHostEnvironment environment, IConfiguration configuration)
     {
-        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
+        Environment = environment;
+        Configuration = configuration;
+    }
+
+    public IWebHostEnvironment Environment { get; }
+    public IConfiguration Configuration { get; }
+
+    // This method gets called by the runtime. Use this method to add services to the container.
+    public void ConfigureServices(IServiceCollection services)
+    {
+        var conString = Configuration.GetConnectionString("AzureConnection");
+        services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(conString));
+
+        services.AddControllers();
+
+        services.AddAuthentication("Bearer")
+        .AddJwtBearer("Bearer", options =>
         {
-            Environment = environment;
-            Configuration = configuration;
-        }
+            options.Authority = Configuration["Services:AuthenticationService"];
+            // Todo: HUGE PROBLEM, MAKE HHTTPS WORK somehow
+            options.RequireHttpsMetadata = false;
 
-        public IWebHostEnvironment Environment { get; }
-        public IConfiguration Configuration { get; }
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidAudience = "recommendation-service",
+                // HUGE PROBLEM?
+                ValidateIssuer = false,
+                NameClaimType = "name",
+            };
+        });
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        services.AddCors(options =>
         {
-            var conString = Configuration.GetConnectionString("AzureConnection");
-            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(conString));
-
-            services.AddControllers();
-
-            services.AddAuthentication("Bearer")
-            .AddJwtBearer("Bearer", options =>
+            options.AddPolicy("default", policy =>
             {
-                options.Authority = Configuration["Services:AuthenticationService"];
-                // Todo: HUGE PROBLEM, MAKE HHTTPS WORK somehow
-                options.RequireHttpsMetadata = false;
+                policy.WithOrigins("http://localhost:4200")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
 
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidAudience = "recommendation-service",
-                    // HUGE PROBLEM?
-                    ValidateIssuer = false,
-                    NameClaimType = "name",
-                };
+                policy.WithOrigins("https://bondarencom.github.io")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+
+                policy.WithOrigins("http://bondarencom.github.io")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
             });
+        });
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("default", policy =>
-                {
-                    policy.WithOrigins("http://localhost:4200")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
+        services.AddHttpContextAccessor();
+        services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User);
 
-                    policy.WithOrigins("https://bondarencom.github.io")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
+        services.AddScoped( 
+            sv => new WikiClient{ ClientUserAgent = "WCLQuickStart/1.0 bondarencom" }
+        );
+        services.AddScoped( 
+            sv => new WikiSite(sv.GetService<WikiClient>(), "https://www.wikidata.org/w/api.php")
+        );
 
-                    policy.WithOrigins("http://bondarencom.github.io")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
-            });
+        services.AddScoped<IPersonaScrappingService, WikiPersonaScrappingService>();
+        services.AddScoped<IInterestScrappingService, WikiInterestScrappingService>();
 
-            services.AddHttpContextAccessor();
-            services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User);
+        services.AddScoped<IPersonasService, PersonasService>();
+        services.AddScoped<IInterestService, InterestService>();
+        services.AddScoped<IRecommendationService, RecommednationService>();
 
-            services.AddScoped( 
-                sv => new WikiClient{ ClientUserAgent = "WCLQuickStart/1.0 bondarencom" }
-            );
-            services.AddScoped( 
-                sv => new WikiSite(sv.GetService<WikiClient>(), "https://www.wikidata.org/w/api.php")
-            );
+        services.AddTransient<ICommentService, CommentService>();
+    }
 
-            services.AddScoped<IPersonaScrappingService, WikiPersonaScrappingService>();
-            services.AddScoped<IInterestScrappingService, WikiInterestScrappingService>();
-
-            services.AddScoped<IPersonasService, PersonasService>();
-            services.AddScoped<IInterestService, InterestService>();
-            services.AddScoped<IRecommendationService, RecommednationService>();
-
-            services.AddTransient<ICommentService, CommentService>();
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                IdentityModelEventSource.ShowPII = true;
-            }
-            app.UseCors("default");
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseRabbitMQ();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-            app.MigrateDatabase();
-
+            app.UseDeveloperExceptionPage();
+            IdentityModelEventSource.ShowPII = true;
         }
+        app.UseCors("default");
+        app.UseHttpsRedirection();
+
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseRabbitMQ();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+        app.MigrateDatabase();
 
     }
+
 }

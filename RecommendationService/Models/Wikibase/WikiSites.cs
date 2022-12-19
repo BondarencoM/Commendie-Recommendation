@@ -1,7 +1,6 @@
-﻿namespace RecommendationService.Models.Wikibase
+﻿namespace RecommendationService.Models.Wikibase;
+
+public static class WikiSites
 {
-    public static class WikiSites
-    {
-        public static string EnglishWikipedia => "enwiki";
-    }
+    public static string EnglishWikipedia => "enwiki";
 }

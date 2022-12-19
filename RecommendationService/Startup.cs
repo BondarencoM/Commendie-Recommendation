@@ -33,15 +33,8 @@ namespace RecommendationService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (Environment.IsDevelopment())
-            {
-                services.AddDbContext<DatabaseContext>(options => options.UseSqlite(@"Data Source=recommendations.db"));
-            }
-            else
-            {
-                var conString = Configuration.GetConnectionString("AzureConnection");
-                services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(conString));
-            }
+            var conString = Configuration.GetConnectionString("AzureConnection");
+            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(conString));
 
             services.AddControllers();
 

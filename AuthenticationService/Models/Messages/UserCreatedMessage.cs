@@ -1,6 +1,6 @@
 ﻿namespace AuthenticationService.Models.Messages
 {
-    public class UserCreatedMessage
+    public class UserIdentifierMessage
     {
         public string Username { get; set; }
     }

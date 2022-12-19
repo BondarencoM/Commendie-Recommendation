@@ -94,5 +94,16 @@ namespace RecommendationService.Services
 
             return await query.ToListAsync();
         }
+
+        public async Task CleanseUser(string username)
+        {
+            //await db.Comments
+            //    .Where(c => c.Username == username)
+            //    .ExecuteUpdateAsync(c =>
+            //        c.SetProperty(p => p.Text, "[removed]")
+            //         .SetProperty(p => p.IsDeleted, true)
+            //    );
+
+        }
     }
 }

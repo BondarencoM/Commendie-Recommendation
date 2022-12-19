@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 
 namespace RecommendationService.Services.Interfaces
 {
-    public interface ICommentService : IRabbitEventHandler
+    public interface IUserService : IRabbitEventHandler
     {
-        Task<List<Comment>> GetCommentsForRecommendation(long id, int limit, int skip);
-        Task CleanseUser(string username);
     }
 }

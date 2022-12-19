@@ -1,4 +1,5 @@
 ﻿using AuthenticationService.Services;
+using AuthenticationService.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;

@@ -10,7 +10,7 @@ public class Profile
     {
     }
 
-    public Profile(CreateProfileIM input)
+    public Profile(ProfileIdentiferIM input)
     {
         this.Id = input.Username;
     }

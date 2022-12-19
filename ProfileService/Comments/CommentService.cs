@@ -35,7 +35,7 @@ public class CommentService : ICommentService
             var newComment = JsonSerializer.Deserialize<CreateCommentIM>(message)
                 ?? throw new InvalidOperationException($"Could not deserialize {typeof(CreateCommentIM)} from {message}");
 
-            if (newComment.Username is null or "Anonymous") { }
+            if (newComment.Username is null or "Anonymous") return;
 
             var comment = new Comment(newComment);
             this.db.Comments.Add(comment);

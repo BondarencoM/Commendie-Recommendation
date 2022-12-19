@@ -10,7 +10,7 @@ namespace AuthenticationService.Pages
 
         public IndexModel(IConfiguration configuration)
         {
-            LinkToHome = configuration.GetSection("Clients:Cors").GetChildren().Select(s => s.Value).FirstOrDefault();
+            LinkToHome = configuration.GetValue<string>("Clients:Frontend");
         }
 
         public void OnGet()

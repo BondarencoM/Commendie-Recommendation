@@ -8,6 +8,7 @@ namespace RecommendationService.Models.Interests
     public class Interest
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         [Required]

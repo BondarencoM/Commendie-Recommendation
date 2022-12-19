@@ -40,16 +40,9 @@ namespace AuthenticationService
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            if (Environment.IsDevelopment())
-            {
-                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(@"Data Source=AspIdUsers.db"));
-            }
-            else
-            {
-                var conString = Configuration.GetConnectionString("AzureConnection");
-                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(conString));
-            }
-
+            var conString = Configuration.GetConnectionString("AzureConnection");
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(conString));
+           
             services.AddIdentity<ApplicationUser, IdentityRole>( options =>
             {
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
@@ -93,10 +86,6 @@ namespace AuthenticationService
                 });
 
             services.AddTransient<IEmailSender, EmailSenderStub>();
-
-            services.AddHttpClient<IProfileService, ProfileService>(
-                client => client.BaseAddress = new Uri("http://profileservice:80/api/")
-            );
         }
 
         public void Configure(IApplicationBuilder app)

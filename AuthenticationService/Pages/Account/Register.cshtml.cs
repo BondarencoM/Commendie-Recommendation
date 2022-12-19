@@ -1,7 +1,7 @@
 ﻿using AuthenticationService.Models;
 using AuthenticationService.Models.Messages;
-using AuthenticationService.Services;
 using AuthenticationService.Services.Interfaces;
+using AuthenticationService.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -47,7 +47,7 @@ namespace AuthenticationService.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+        //public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public class InputModel
         {
@@ -72,25 +72,29 @@ namespace AuthenticationService.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [CheckBoxRequired(ErrorMessage = "You must tick this box")]
+            [Display(Name = "Conset to personal data storage and processing as per the Privacy note")]
+            public bool Consent { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = "@" + Input.Username, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    var createdMessage = new UserCreatedMessage() { Username = user.UserName };
+                    var createdMessage = new UserIdentifierMessage() { Username = user.UserName };
                     Task notifyTask = userPublisher.Created(createdMessage);
                     _logger.LogInformation("User created a new account with password.");
 

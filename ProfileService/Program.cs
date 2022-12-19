@@ -59,15 +59,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlite(@"Data Source=Profiles.db"));
-}
-else
-{
-    var conString = builder.Configuration.GetConnectionString("AzureConnection");
-    builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(conString));
-}
+var conString = builder.Configuration.GetConnectionString("AzureConnection");
+builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(conString));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

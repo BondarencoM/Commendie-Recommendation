@@ -22,7 +22,6 @@ namespace RecommendationService.Migrations
             modelBuilder.Entity("RecommendationService.Models.Comments.Comment", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")

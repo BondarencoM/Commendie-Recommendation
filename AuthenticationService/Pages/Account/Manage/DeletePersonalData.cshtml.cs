@@ -1,4 +1,7 @@
 ﻿using AuthenticationService.Models;
+using AuthenticationService.Models.Messages;
+using AuthenticationService.Services;
+using AuthenticationService.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,15 +16,18 @@ namespace AuthenticationService.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IUserPublisher userPublisher;
         private readonly ILogger<DeletePersonalDataModel> _logger;
 
         public DeletePersonalDataModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            IUserPublisher userPublisher,
             ILogger<DeletePersonalDataModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            this.userPublisher = userPublisher;
             _logger = logger;
         }
 
@@ -67,6 +73,7 @@ namespace AuthenticationService.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            await userPublisher.Deleted(new UserIdentifierMessage { Username = user.UserName });
             var result = await _userManager.DeleteAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);
             if (!result.Succeeded)

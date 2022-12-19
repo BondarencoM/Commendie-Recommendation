@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RecommendationService.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +11,8 @@ namespace RecommendationService.Migrations
                 name: "Interests",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     WikiId = table.Column<string>(nullable: false),
@@ -76,8 +77,7 @@ namespace RecommendationService.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(nullable: false),
                     Text = table.Column<string>(nullable: true),
                     Username = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: true),

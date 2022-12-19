@@ -63,15 +63,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddRabbitMQ(builder.Configuration);
 builder.Services.AddTransient<ICommentService, CommentService.Services.CommentService>();
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlite(@"Data Source=Comments.db"));
-}
-else
-{
-    var conString = builder.Configuration.GetConnectionString("AzureConnection");
-    builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(conString));
-}
+var conString = builder.Configuration.GetConnectionString("AzureConnection");
+builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(conString));
 
 var app = builder.Build();
 

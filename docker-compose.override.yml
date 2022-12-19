@@ -11,6 +11,7 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
   profileservice:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -43,3 +44,20 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  rabbitmq:
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
+  sqldata:
+    environment:
+        - MSSQL_SA_PASSWORD=Pass@word
+        - ACCEPT_EULA=Y
+    ports:
+        - "5434:1433"
+    volumes:
+        - ~/.docker-conf/mssql/data/:/var/opt/mssql/data 

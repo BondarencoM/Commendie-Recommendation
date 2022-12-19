@@ -10,8 +10,8 @@ using RecommendationService.Models;
 namespace RecommendationService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20221207171739_Initial")]
-    partial class Initial
+    [Migration("20221217201949_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,9 +24,7 @@ namespace RecommendationService.Migrations
             modelBuilder.Entity("RecommendationService.Models.Comments.Comment", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");

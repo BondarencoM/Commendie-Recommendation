@@ -5,7 +5,42 @@
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
-<h4>@ViewData["Title"]</h4>
+<p>
+    Not all of your data may be immedeately accessible. <br/>
+    Click "Update" to request data from all services. <br />
+    Refresh to see which services have responded. <br />
+    Click "Download" when you want to download everything onto your device. <br />
+</p>
+<form id="download-data" asp-page="DownloadPersonalData" method="post" class="form-group">
+    <button class="btn btn-primary" asp-page-handler="update">Update</button>
+</form>
+<h4>The following services have your data:</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th> Service name </th>
+            <th> Last update at </th>
+        </tr>
+    </thead>
+    @if (Model.Downloadables is null)
+    {
+        <tr>
+            <td colspan="2">
+                No data
+            </td>
+        </tr>
+    }else @foreach (var item in Model?.Downloadables)
+    {
+        <tr>
+            <td> @item.DomainName </td>
+            <td> @item.RecordedAt.ToString("G")</td>
+        </tr>
+    }
+</table>
+<form id="download-data" asp-page="DownloadPersonalData" method="post" class="form-group">
+    <button class="btn btn-primary" asp-page-handler="download"> Download Everything </button>
+</form>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

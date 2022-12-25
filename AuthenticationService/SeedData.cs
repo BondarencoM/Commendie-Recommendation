@@ -3,7 +3,6 @@
 
 
 using AuthenticationService.Data;
-using AuthenticationService.Models;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

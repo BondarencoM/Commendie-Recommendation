@@ -69,9 +69,22 @@ public class InterestService : IInterestService
         return interest ?? await Add(input);
     }
 
-    public Task CleanseUser(UserIdentifier user) =>
+    public Task CleanseUser(UserIdentifierIM user) =>
         db.Interests
             .Where(c => c.AddedBy == user.Username)
             .ExecuteUpdateAsync(comment =>
                 comment.SetProperty(p => p.AddedBy, "[removed]"));
+
+    public async Task<PersonalDataModel> GetDownloadableUserData(UserIdentifierIM user)
+    {
+        var interestsAdded = await db.Interests
+            .Where(c => c.AddedBy == user.Username)
+            .ToListAsync();
+
+        return new PersonalDataModel()
+        {
+            JsonData = interestsAdded,
+            Name = "addedInterests",
+        };
+    }
 }

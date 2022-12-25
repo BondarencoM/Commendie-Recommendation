@@ -130,9 +130,22 @@ public class PersonasService : IPersonasService
         return await query;
     }
 
-    public Task CleanseUser(UserIdentifier user) =>
+    public Task CleanseUser(UserIdentifierIM user) =>
         db.Personas
             .Where(c => c.AddedBy == user.Username)
             .ExecuteUpdateAsync(comment =>
-                comment.SetProperty(p => p.Username, "[removed]"));
+                comment.SetProperty(p => p.AddedBy, "[removed]"));
+
+    public async Task<PersonalDataModel> GetDownloadableUserData(UserIdentifierIM user)
+    {
+        var data = await db.Personas
+            .Where(c => c.AddedBy == user.Username)
+            .ToListAsync();
+
+        return new PersonalDataModel()
+        {
+            JsonData = data,
+            Name = "addedPersonas",
+        };
+    }
 }

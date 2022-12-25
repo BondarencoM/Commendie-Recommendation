@@ -62,6 +62,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddRabbitMQ(builder.Configuration);
 builder.Services.AddTransient<ICommentService, CommentService.Services.CommentService>();
+builder.Services.AddTransient<IHasDownloadableUserData, CommentService.Services.CommentService>();
+
+builder.Services.AddTransient<IUserService, CommentService.Services.UserService>();
 
 var conString = builder.Configuration.GetConnectionString("AzureConnection");
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(conString));
@@ -75,6 +78,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     IdentityModelEventSource.ShowPII = true;
 }
+
+app.UseRabbitMQ();
 
 app.UseCors(MyAllowSpecificOrigins);
 

@@ -1,4 +1,4 @@
-﻿using AuthenticationService.Models.Messages;
+﻿using AuthenticationService.Data.Messages;
 using System.Threading.Tasks;
 
 namespace AuthenticationService.Services.Interfaces
@@ -7,5 +7,7 @@ namespace AuthenticationService.Services.Interfaces
     {
         Task Created(UserIdentifierMessage user);
         Task Deleted(UserIdentifierMessage user);
+        Task DataRequested(UserIdentifierMessage user);
+
     }
 }

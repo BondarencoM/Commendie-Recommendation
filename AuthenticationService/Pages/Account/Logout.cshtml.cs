@@ -1,4 +1,4 @@
-﻿using AuthenticationService.Models;
+﻿using AuthenticationService.Data;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

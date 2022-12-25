@@ -5,7 +5,6 @@
 using AuthenticationService.Configs;
 using AuthenticationService.Data;
 using AuthenticationService.Extensions;
-using AuthenticationService.Models;
 using AuthenticationService.Services;
 using AuthenticationService.Services.Interfaces;
 using IdentityServer4;
@@ -40,6 +39,13 @@ namespace AuthenticationService
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            services.AddRabbitMQ(Configuration);
+
+            services.AddScoped<IDownloadableDataService, DownloadableDataService>();
+            services.AddScoped<IRabbitEventHandler, DownloadableDataService>();
+
+            services.AddScoped<IUserPublisher, RabbitmqUserPublisher>();
+
             var conString = Configuration.GetConnectionString("AzureConnection");
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(conString));
            
@@ -53,9 +59,6 @@ namespace AuthenticationService
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
-            services.AddRabbitMQ(Configuration);
-
 
             var builder = services.AddIdentityServer(options =>
             {
@@ -107,6 +110,7 @@ namespace AuthenticationService
                 IdentityModelEventSource.ShowPII = true;
             }
 
+            app.UseRabbitMQ();
             app.UseStaticFiles();
 
             app.UseRouting();

@@ -1,5 +1,5 @@
-﻿using AuthenticationService.Models;
-using AuthenticationService.Models.Messages;
+﻿using AuthenticationService.Data;
+using AuthenticationService.Data.Messages;
 using AuthenticationService.Services;
 using AuthenticationService.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;

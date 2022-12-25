@@ -83,8 +83,21 @@ public class RecommednationService : IRecommendationService
         await db.SaveChangesAsync();
     }
 
-    public Task CleanseUser(UserIdentifier user) =>
+    public Task CleanseUser(UserIdentifierIM user) =>
         db.Recommendations
             .Where(r => r.AddedBy == user.Username)
             .ExecuteUpdateAsync(comment => comment.SetProperty(p => p.AddedBy, "[removed]"));
+
+    public async Task<PersonalDataModel> GetDownloadableUserData(UserIdentifierIM user)
+    {
+        var data = await db.Recommendations
+            .Where(c => c.AddedBy == user.Username)
+            .ToListAsync();
+
+        return new PersonalDataModel()
+        {
+            JsonData = data,
+            Name = "addedRecommendations",
+        };
+    }
 }

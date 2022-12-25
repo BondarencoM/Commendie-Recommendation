@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace RecommendationService.Services.Interfaces;
 
-public interface IPersonasService : IUserCleanseable, IRepository<Persona, CreatePersonaInputModel, UpdatePersonaInputModel>
+public interface IPersonasService : IHasUserData, IRepository<Persona, CreatePersonaInputModel, UpdatePersonaInputModel>
 {
     public Task<List<PersonaWithInterestsViewModel>> GetSuggestedForDiscovery(ushort limit);
 

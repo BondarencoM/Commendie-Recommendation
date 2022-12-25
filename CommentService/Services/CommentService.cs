@@ -3,6 +3,7 @@ using CommentService.Extensions;
 using CommentService.Models;
 using CommentService.Models.Messages;
 using CommentService.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Principal;
 
 namespace CommentService.Services;
@@ -84,6 +85,16 @@ public class CommentService : ICommentService
             newComment.Id,
             newComment.Text ?? "",
             fromDb.Domain));
+    }
+
+    public async Task<PersonalDataModel> GetDownloadableUserData(string username)
+    {
+        var comments = await db.Comments.Where(c => c.Username == username).ToListAsync();
+        return new PersonalDataModel
+        {
+            Name = "comments",
+            JsonData = comments,
+        };
     }
 
     private bool CanEdit(Comment comment) => this.principal.IsAdmin() || CommentBelongsToUser(comment);

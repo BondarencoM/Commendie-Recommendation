@@ -1,4 +1,4 @@
-﻿namespace AuthenticationService.Models.Messages
+﻿namespace AuthenticationService.Data.Messages
 {
     public class UserIdentifierMessage
     {

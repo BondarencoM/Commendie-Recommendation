@@ -1,4 +1,4 @@
-﻿using AuthenticationService.Models.Messages;
+﻿using AuthenticationService.Data.Messages;
 using AuthenticationService.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -42,6 +42,16 @@ namespace AuthenticationService.Services
             var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(user));
             channel.BasicPublish(exchange: "users",
                                  routingKey: $"users.deleted",
+                                 basicProperties: null,
+                                 body: body);
+            return Task.CompletedTask;
+        }
+
+        public Task DataRequested(UserIdentifierMessage user)
+        {
+            var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(user));
+            channel.BasicPublish(exchange: "users",
+                                 routingKey: $"users.dataRequested",
                                  basicProperties: null,
                                  body: body);
             return Task.CompletedTask;

@@ -3,6 +3,7 @@ using CommentService.Services;
 using RabbitMQ.Client;
 using System.Threading.RateLimiting;
 using System.Security.Claims;
+using RabbitMQ.Client.Events;
 
 namespace CommentService.Extensions;
 
@@ -28,14 +29,69 @@ public static class StartupExtenstions
                 using var channel = con.CreateModel();
 
                 channel.ExchangeDeclare("comments", ExchangeType.Topic, durable: true, autoDelete: false);
+                channel.ExchangeDeclare("downloadable-personal-data", type: "topic", durable: true, autoDelete: false);
+
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+                throw;
             }
         });
     }
 
+    public static void UseRabbitMQ(this IApplicationBuilder app)
+    {
+        var config = app.ApplicationServices.GetService<IConfiguration>();
+        var factory = new ConnectionFactory()
+        {
+            Uri = new Uri(config.GetConnectionString("RabbitMq")!),
+        };
+
+        var con = factory.CreateConnection("Comment service set-up");
+
+        // Users topic
+        var channel = con.CreateModel();
+
+        const string downloadableDataQueueName = "comments-service-downloadables";
+        
+        channel.ExchangeDeclare("users", type: "topic", durable: true, autoDelete: false);
+
+        channel.QueueDeclare(downloadableDataQueueName, durable: true, exclusive: false, autoDelete: false);
+        channel.QueueBind(queue: downloadableDataQueueName,
+                             exchange: "users",
+                             routingKey: "users.dataRequested");
+
+
+        var consumer = new EventingBasicConsumer(channel);
+        consumer.Received += HandleEvent<IUserService>;
+
+        channel.BasicConsume(queue: downloadableDataQueueName,
+                             autoAck: true,
+                             consumer: consumer);
+
+        async void HandleEvent<THandler>(object? s, BasicDeliverEventArgs? e) where THandler : IRabbitEventHandler
+        {
+            IServiceScope scope = null;
+            try
+            {
+                scope = app.ApplicationServices.CreateScope();
+                var service = scope.ServiceProvider.GetRequiredService<THandler>();
+                await service.HandleAsyncEvent(s, e);
+            }
+            catch (Exception ex)
+            {
+                var logger = scope?.ServiceProvider.GetRequiredService<ILogger<THandler>>();
+
+                if (logger == null)
+                    Console.WriteLine(ex.ToString());
+                else
+                    logger.LogError(ex, $"Could not handle event {e} sent by {s}.");
+            }
+        }
+
+    }
+    
     public static void AddRateLimiting(this IServiceCollection services)
     {
         services.AddRateLimiter(options =>

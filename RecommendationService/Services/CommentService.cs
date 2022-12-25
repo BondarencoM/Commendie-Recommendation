@@ -90,7 +90,7 @@ public class CommentService : ICommentService
         return await query.ToListAsync();
     }
 
-    public Task CleanseUser(UserIdentifier user) =>
+    public Task CleanseUser(UserIdentifierIM user) =>
         db.Comments
             .Where(c => c.Username == user.Username)
             .ExecuteUpdateAsync(comment =>
@@ -98,4 +98,17 @@ public class CommentService : ICommentService
                        .SetProperty(p => p.Username, "[removed]")
                        .SetProperty(p => p.IsDeleted, true)
             );
+
+    public async Task<PersonalDataModel> GetDownloadableUserData(UserIdentifierIM user)
+    {
+        var comments = await db.Comments
+            .Where(c => c.Username == user.Username)
+            .ToListAsync();
+
+        return new PersonalDataModel()
+        {
+            JsonData = comments,
+            Name = "comments",
+        };
+    }
 }

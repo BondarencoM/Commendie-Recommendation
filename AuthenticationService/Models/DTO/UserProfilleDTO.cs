@@ -1,4 +1,6 @@
-﻿namespace AuthenticationService.Models.DTO
+﻿using AuthenticationService.Data;
+
+namespace AuthenticationService.Data.DTO
 {
     class UserProfilleDTO
     {

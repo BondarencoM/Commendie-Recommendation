@@ -2,7 +2,7 @@
 
 namespace CommentService.Services.Interfaces;
 
-public interface ICommentService
+public interface ICommentService : IHasDownloadableUserData
 {
     public Task<Comment> Create(CreateCommentInputModel input);
     public Task Delete(int id);

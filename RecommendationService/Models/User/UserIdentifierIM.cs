@@ -1,6 +1,6 @@
 ﻿namespace RecommendationService.Models.User;
 
-public class UserIdentifier
+public class UserIdentifierIM
 {
     public string Username { get; set; }
 }

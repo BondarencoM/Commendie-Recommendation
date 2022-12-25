@@ -6,11 +6,41 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RecommendationService.Services.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace RecommendationService.Extensions;
 
 public static class StartupExtenstions
 {
+    public static void AddRabbitMQ(this IServiceCollection services, IConfiguration config)
+    {
+        var factory = new ConnectionFactory()
+        {
+            Uri = new Uri(config.GetConnectionString("RabbitMq")),
+        };
+
+        services.AddSingleton<IConnectionFactory>(factory);
+
+        services.AddScoped(c => c.GetService<IConnectionFactory>()!.CreateConnection("Recommendation service"));
+
+        Task.Run(() =>
+        {
+            try
+            {
+                using var con = factory.CreateConnection("Recommendation service set-up");
+                using var channel = con.CreateModel();
+
+                channel.ExchangeDeclare("downloadable-personal-data", type: "topic", durable: true, autoDelete: false);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                throw;
+            }
+        });
+    }
+
     public static void UseRabbitMQ(this IApplicationBuilder app)
     {
         var config = app.ApplicationServices.GetService<IConfiguration>();

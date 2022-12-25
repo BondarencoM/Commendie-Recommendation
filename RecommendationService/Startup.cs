@@ -37,6 +37,7 @@ public class Startup
         services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(conString));
 
         services.AddControllers();
+        services.AddRabbitMQ(Configuration);
 
         services.AddAuthentication("Bearer")
         .AddJwtBearer("Bearer", options =>
@@ -86,16 +87,18 @@ public class Startup
         services.AddScoped<IInterestScrappingService, WikiInterestScrappingService>();
 
         services.AddScoped<IPersonasService, PersonasService>();
-        services.AddScoped<IUserCleanseable, PersonasService>();
+        services.AddScoped<IHasUserData, PersonasService>();
 
         services.AddScoped<IInterestService, InterestService>();
-        services.AddScoped<IUserCleanseable, InterestService>();
+        services.AddScoped<IHasUserData, InterestService>();
 
         services.AddScoped<IRecommendationService, RecommednationService>();
-        services.AddScoped<IUserCleanseable, RecommednationService>();
+        services.AddScoped<IHasUserData, RecommednationService>();
 
         services.AddScoped<ICommentService, CommentService>();
-        services.AddScoped<IUserCleanseable, CommentService>();
+        services.AddScoped<IHasUserData, CommentService>();
+
+        services.AddScoped<IUserService, UserService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

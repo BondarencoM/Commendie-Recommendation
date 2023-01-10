@@ -95,7 +95,7 @@ public class UserService : IUserService
         
         Task Default()
         {
-            this.logger.LogWarning("Could not handle Comment message" +
+            this.logger.LogWarning("Could not handle message" +
                                     $" with routing key {args.RoutingKey} and body {message}");
             return Task.CompletedTask;
         }

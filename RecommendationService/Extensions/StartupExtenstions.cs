@@ -82,7 +82,7 @@ public static class StartupExtenstions
         channel.QueueDeclare(usersQueueName, durable: true, exclusive: false, autoDelete: false);
         channel.QueueBind(queue: usersQueueName,
                              exchange: "users",
-                             routingKey: "users.delete");
+                             routingKey: "users.#");
 
 
         consumer = new EventingBasicConsumer(channel);

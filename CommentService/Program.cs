@@ -83,7 +83,8 @@ app.UseRabbitMQ();
 
 app.UseCors(MyAllowSpecificOrigins);
 
-app.UseRateLimiter();
+// Disable this for load test until we have a proper testing environment 
+// app.UseRateLimiter();
 
 app.UseHttpsRedirection();
 

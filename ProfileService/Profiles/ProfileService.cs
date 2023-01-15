@@ -24,7 +24,7 @@ public class ProfileService : IProfileService
     public async Task<Profile> FindByUsername(string username) =>
         await db.Profiles
             .Where(p => p.Id == username)
-            .Include(p => p.Comments.OrderByDescending(c => c.CreatedAt))
+            .Include(p => p.Comments.OrderByDescending(c => c.CreatedAt).Take(100))
             .FirstOrDefaultAsync()
             ?? throw new ProfileNotFoundException();
 
